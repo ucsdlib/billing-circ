@@ -1,6 +1,6 @@
 <html>
 	<head>
-        <title>BILLING</title>
+        <title>BILLING Circulation </title>
 		<!--STYLESHEETS -->
 		 <link rel="stylesheet" href="css/billing.css" media="screen"></link>
         <link rel="stylesheet" href="css/reset.css" media="all"></link>
@@ -30,8 +30,8 @@
 	<body>
 		<div class="container">
 			<div class="header">
-					<h1>BILLING</h1>
-					<h2>UCSD Libraries Billing Applications</h2>
+					<h1>BILLING Circulation</h1>
+					<h2>UCSD Libraries BILLING Circulation Applications</h2>
 			</div>
 			<div id ="filediv">
 			<div id='actions'>
@@ -223,7 +223,7 @@
 				<!-- ========================================================= -->
 			</div> <!--  data container div end -->
 			
-			<div class="footer">UCSD Libraries Digital Billing Applications RELEASE_0.06</div>
+			<div class="footer">UCSD Libraries Digital BILLING Circulation Applications RELEASE_0.06</div>
 		</div>
 		
 		
