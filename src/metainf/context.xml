@@ -1,4 +1,4 @@
-<Context path="/billing" docBase="billing" debug="5" reloadable="true" crossContext="true">
+<Context path="/billing-circ" docBase="billing-circ" debug="5" reloadable="true" crossContext="true">
     <Realm className="edu.ucsd.library.security.LibraryRealmAD" debug="99"
         connectionURL="ldap://ldap.ad.ucsd.edu" userPrefix="CN="
         userSuffix=",OU=Users,OU=University Library,DC=AD,DC=UCSD,DC=EDU"

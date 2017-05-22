@@ -14,7 +14,7 @@
     </script>
   </head>
   <body onLoad="init();">
-    <h1>Billing</h1>
+    <h1>Billing Circulation</h1>
     <p>Please enter your Active Directory username and password.</p>
 
     <form name="f1" method="POST" action="j_security_check" >

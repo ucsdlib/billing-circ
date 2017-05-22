@@ -5,8 +5,8 @@ bursar/trunk
 
 //datasource configuration in trunk/common/jboss/dev/
 dev-DB2-ds.xml
-dev-billingTest-ds.xml - test account for local Oracle Billing DB connection
-dev-billing-ds.xml - production account for local Oracle Billing DB connection
+dev-billing-circTest-ds.xml - test account for local Oracle Billing-circ DB connection
+dev-billing-circ-ds.xml - production account for local Oracle Billing-circ DB connection
 
 //db2 drivers needed in /usr/local/jboss/server/all/lib or tomcat/common/lib/
 db2jcc.jar

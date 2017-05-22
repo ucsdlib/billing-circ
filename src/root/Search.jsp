@@ -1,6 +1,6 @@
 <html>
 	<head>
-        <title>BILLING</title>
+        <title>BILLING Circulation</title>
 		<!--STYLESHEETS -->
 		 <link rel="stylesheet" href="css/search.css" media="screen"></link>
         <link rel="stylesheet" href="css/reset.css" media="all"></link>
@@ -27,8 +27,8 @@
 	
 	<div class="container">
 			<div class="header">
-					<h1>BILLING</h1>
-					<h2>UCSD Libraries Billing Applications</h2>
+					<h1>BILLING Circulation</h1>
+					<h2>UCSD Libraries BILLING Circulation Applications</h2>
 			</div>
 			<div id="search">
 			<fieldset>
@@ -58,7 +58,7 @@
 		    </div>
 	
 	</div>
-	<div class="footer">UCSD Libraries Digital Billing Applications</div>
+	<div class="footer">UCSD Libraries Digital BILLING Circulation Applications</div>
 		</div>
 	<script type="text/javascript">
 			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

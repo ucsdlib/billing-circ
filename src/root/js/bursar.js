@@ -81,7 +81,7 @@ $(function(){
 			ajaxParams = ajaxParams + sep + "endDate="+endDate;
 		}
 		$.ajax({
-			url: "/billing/servlets/GetBursarData",
+			url: "/billing-circ/servlets/GetBursarData",
 			//url: "json.txt",
 			dataType: "json",
 			data: ajaxParams,
@@ -161,6 +161,6 @@ $(function(){
 		);	
 	}
 	function processFile(){
-		window.open("/billing/servlets/ProcessBursarData");
+		window.open("/billing-circ/servlets/ProcessBursarData");
 	}
 });

@@ -55,7 +55,7 @@ $(function(){
 		var reportDate = $("#reportDate").val();
 		var ajaxParams = "reportDate="+reportDate;
 		$.ajax({
-			url: "/billing/servlets/UpdateReportDate",
+			url: "/billing-circ/servlets/UpdateReportDate",
 			dataType: "text",
 			data: ajaxParams,
 			error: function (xhr, desc, exceptionobj) {

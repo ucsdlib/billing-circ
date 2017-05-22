@@ -16,7 +16,7 @@ $(function(){
 			
 			//alert(searchCriteria);
 			$.ajax({
-				url: "/billing/servlets/GetSearchResults", 
+				url: "/billing-circ/servlets/GetSearchResults", 
 				dataType: 'json',
 				data:{searchval:searchval,searchCriteria:searchCriteria},
 				success: displaySearchResults,
@@ -44,7 +44,7 @@ $(function(){
 				 //alert(tokensPending);
 				
 				 $.ajax({
-						url: "/billing/servlets/GetPatronHistory", 
+						url: "/billing-circ/servlets/GetPatronHistory", 
 						dataType: 'json',
 						data: {patronNo:tokensPending},
 						success: displayPatronHistoryWindow,
@@ -174,7 +174,7 @@ $(function(){
 	   //html += 'window.opener.getInvoiceNotes(invNo); ';
 	   html += '$.blockUI({ message:"Getting invoice notes..." });';
 	   //html += '$().ajaxStart($.blockUI).ajaxStop($.unblockUI);';
-	   var ajaxcall = '$.ajax({url: "/billing/servlets/GetInvoiceNotes", dataType: "json",data:{invNo:invNo},success:function(data){ $.unblockUI();if(data.sizeInvoiceNoteArray === 0) {$("#addNote").empty();var tableBody =$("<tbody></tbody>").html("No data");var p = $("<p></p>").html(tableBody);$("#addNote").append(p);return true;} else {var tableBody =$("<tbody></tbody>");$("#addNote").empty(); $.each(data["invoiceNoteArray"],function(){ var row =  $("<tr></tr>");var col1 =  $("<td></td>").html(this.date);col1.css("padding", "6px 11px"); var col2 =  $("<td></td>").html(this.username);col2.css("padding", "6px 11px");var col3 =  $("<td></td>").html(this.notes);row.append(col1).append(col2).append(col3);tableBody.append(row);}); var p = $("<p></p>").html(tableBody); $("#addNote").append(p);return true;}},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling GetInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
+	   var ajaxcall = '$.ajax({url: "/billing-circ/servlets/GetInvoiceNotes", dataType: "json",data:{invNo:invNo},success:function(data){ $.unblockUI();if(data.sizeInvoiceNoteArray === 0) {$("#addNote").empty();var tableBody =$("<tbody></tbody>").html("No data");var p = $("<p></p>").html(tableBody);$("#addNote").append(p);return true;} else {var tableBody =$("<tbody></tbody>");$("#addNote").empty(); $.each(data["invoiceNoteArray"],function(){ var row =  $("<tr></tr>");var col1 =  $("<td></td>").html(this.date);col1.css("padding", "6px 11px"); var col2 =  $("<td></td>").html(this.username);col2.css("padding", "6px 11px");var col3 =  $("<td></td>").html(this.notes);row.append(col1).append(col2).append(col3);tableBody.append(row);}); var p = $("<p></p>").html(tableBody); $("#addNote").append(p);return true;}},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling GetInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
 	   html += ajaxcall;
 	   //html += 'testA();';
 	   html+=  'return false;}else{alert("Please select one record at a time");}}//end of getNote()';
@@ -204,7 +204,7 @@ $(function(){
 	    html += 'document.getElementById("txtNewNote").value= " ";';
 	    html += 'document.getElementById("txtStaff").value= " ";';
 	    //html += 'document.getElementById("txtDate").value= " ";';
-	    var ajaxStat = '$.ajax({url: "/billing/servlets/InsertInvoiceNotes",dataType: "json",data:{strUserId:strUserId,inv:inv,strNote:strNote,strexp:strexp,strres:strres,strcom:strcom},success: function(data){if (data.flag === true)alert("Successfully inserted!"); else alert("Error in Insertion!");},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling InsertInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
+	    var ajaxStat = '$.ajax({url: "/billing-circ/servlets/InsertInvoiceNotes",dataType: "json",data:{strUserId:strUserId,inv:inv,strNote:strNote,strexp:strexp,strres:strres,strcom:strcom},success: function(data){if (data.flag === true)alert("Successfully inserted!"); else alert("Error in Insertion!");},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling InsertInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
 	   // html += 'window.opener.insertInvoinceNote(strUserId,inv,strNote,strexp,strres,strcom);';
 	    html += ajaxStat;
 	    html += 'return true;}//end of function AddNewNotes';
@@ -294,7 +294,7 @@ function saveDataFromViewPatronHistory(pid,strpatron,strnote,flagPID,flagNote)
 {
 	
 	$.ajax({
-		url: "/billing/servlets/ModifyBasicDataPatHistory", 
+		url: "/billing-circ/servlets/ModifyBasicDataPatHistory", 
 		dataType: 'json',
 		data: {pid:pid,note:strnote,patronNo:strpatron,flagPID:flagPID,flagNote:flagNote},
 		success: displayPatronHistoryAfterEdit,
@@ -325,7 +325,7 @@ function displayPatronHistoryAfterEdit(data,status){
 	
 	//alert(searchCriteria);
 	$.ajax({
-		url: "/billing/servlets/GetSearchResults", 
+		url: "/billing-circ/servlets/GetSearchResults", 
 		dataType: 'json',
 		data:{searchval:searchval,searchCriteria:searchCriteria},
 		success: displaySearchResults,
