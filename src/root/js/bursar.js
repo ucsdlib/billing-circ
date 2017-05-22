@@ -30,7 +30,7 @@ $(function(){
 			return false;
 		});
 		$("#logout").bind("click",function(){
-			window.location = "/billing/logout.jsp";
+			window.location = "/billing-circ/logout.jsp";
 		});
 	}
 	/** MAKE SURE DATEFORMAT IS CORRECT TO SEND TO SERVER **/

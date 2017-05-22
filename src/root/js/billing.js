@@ -75,7 +75,7 @@ $(function(){
 		
 		//logout
 		$("#logout").bind("click",function(){
-			window.location = "/billing/logout.jsp";
+			window.location = "/billing-circ/logout.jsp";
 		});
 		
 		$("#homeTab").bind("click",function(){
@@ -380,7 +380,7 @@ $(function(){
 		
 		//logout
 		$("#logout").bind("click",function(){
-			window.location = "/billing/logout.jsp";
+			window.location = "/billing-circ/logout.jsp";
 		});
 		
 		$("#processOutputFile").bind("click",function(){
