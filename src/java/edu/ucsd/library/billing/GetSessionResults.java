@@ -98,7 +98,7 @@ public class GetSessionResults extends HttpServlet {
 		try {
 			conn = ConnectionManager.getConnection("billing");
 			stmt = conn.createStatement();
-			 rs = stmt.executeQuery("SELECT * FROM BILLING.PENDING_HISTORY WHERE to_char(TRANSACTIONDATE,'DD') = "+ "'" + tempArr[2] + "'"+" AND to_char(TRANSACTIONDATE,'MM') = "+ "'" + tempArr[1] + "'" +"AND to_char(TRANSACTIONDATE,'YYYY') =" + "'" + tempArr[0] + "'"+"ORDER BY NAME,INVOICENO");
+			 rs = stmt.executeQuery("SELECT * FROM PENDING_HISTORY WHERE to_char(TRANSACTIONDATE,'DD') = "+ "'" + tempArr[2] + "'"+" AND to_char(TRANSACTIONDATE,'MM') = "+ "'" + tempArr[1] + "'" +"AND to_char(TRANSACTIONDATE,'YYYY') =" + "'" + tempArr[0] + "'"+"ORDER BY NAME,INVOICENO");
 				
 				while (rs.next()) {
 					
