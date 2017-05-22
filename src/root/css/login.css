@@ -1,0 +1,34 @@
+body {
+	background:#4e71b9 url(../images/body_gradient.gif) top left repeat-x !important; 
+	font-family: sans-serif; 
+	text-align: center; 
+	padding: 40px; }
+h1 {
+	color : #EEEEEE; 
+	font-size: xx-large;
+	padding-bottom: 30px;
+}
+p.info{
+	color : #EEEEEE;
+}
+form { 
+	/**border: solid gray 3px;**/ 
+	/**background: #f0f0f0; **/
+	/**padding: 10px;
+	margin-left: 25%; 
+	margin-right: 25%; 
+	padding: 40px; **/
+}
+div.inner {  
+	background: #f0f0f0; 
+	padding: 40px; 
+	border:0; 
+	zoom:1;
+	text-align:center;
+}
+div.outer {
+	margin-left: 25%; 
+	margin-right: 25%;
+	background: #C0C0C0; 
+	padding: 4px;
+}

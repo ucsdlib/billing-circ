@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!-- Custom Ant tasks for deploying/undeploying via Tomcat manager -->
+<!-- this project expects the following properties to be defined:
+
+	jars.home = jar_repository CVS project
+	
+	manager.user = username for tomcat manager
+	manager.pass = password for tomcat manager
+	manager.host = hostname for tomcat manager (optional, will prompt if not)
+
+	dist = directory holding war file (war must be ${dist}/${appName}.war)
+	appName = name of the application/context
+
+-->
+<project name="remote">
+
+  <!-- classpath -->
+  <path id="remote-cp">
+    <fileset dir="${jars.home}">
+      <include name="catalina-ant.jar"/>
+    </fileset>
+  </path>
+
+  <!-- task defs -->
+    <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"
+        classpathref="remote-cp" />
+    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"
+        classpathref="remote-cp"/>
+
+  <!-- GET HOST -->
+  <target name="get_host" description="Get hostname of remote Tomcat">
+    <input addproperty="manager.host" message="Target hostname:"/>
+    <echo level="info" message="manager.host = '${manager.host}'"/>
+  </target>
+
+  <!-- REMOTE UNDEPLOY -->
+  <target name="remote-undeploy" description="Remove webapp from remote tomcat"
+      depends="get_host">
+    <undeploy url="http://${manager.host}:8080/manager" path="/${appName}"
+          username="${manager.user}" password="${manager.pass}" />
+  </target>
+
+  <!-- REMOTE DEPLOY -->
+  <target name="remote-deploy" description="Deploy webapp to remote tomcat"
+      depends="get_host">
+    <echo level="info" message="war = 'file://${dist}/${appName}.war'"/>
+    <deploy url="http://${manager.host}:8080/manager" path="/${appName}"
+        username="${manager.user}" password="${manager.pass}"
+        war="file://${dist}/${appName}.war"/>
+  </target>
+
+  <!-- DEV -->
+  <target name="dev" description="Redeploys to the dev environment">
+    <antcall target="remote-redeploy">
+      <param name="manager.host" value="duilwen"/>
+    </antcall>
+    <antcall target="remote-redeploy">
+      <param name="manager.host" value="thalos"/>
+    </antcall>
+  </target>
+  <target name="dev-deploy" description="Deploys to the dev environment">
+    <antcall target="remote-deploy">
+      <param name="manager.host" value="duilwen"/>
+    </antcall>
+    <antcall target="remote-deploy">
+      <param name="manager.host" value="thalos"/>
+    </antcall>
+  </target>
+
+  <!-- DEMO -->
+  <target name="demo" description="Redeploys to the demo environment">
+    <antcall target="remote-redeploy">
+      <param name="manager.host" value="harlindor"/>
+    </antcall>
+    <antcall target="remote-redeploy">
+      <param name="manager.host" value="hithlum"/>
+    </antcall>
+  </target>
+  <target name="demo-deploy" description="Deploys to the demo environment">
+    <antcall target="remote-deploy">
+      <param name="manager.host" value="harlindor"/>
+    </antcall>
+    <antcall target="remote-deploy">
+      <param name="manager.host" value="hithlum"/>
+    </antcall>
+  </target>
+
+  <!-- PRETEST -->
+  <target name="pretest" description="Redeploys to the pretest environment">
+<!--
+    <antcall target="remote-redeploy">
+      <param name="manager.host" value="pelargir"/>
+    </antcall>
+-->
+    <antcall target="remote-redeploy">
+      <param name="manager.host" value="timaru"/>
+    </antcall>
+  </target>
+  <target name="pretest-deploy" description="Deploys to the pretest environment">
+    <antcall target="remote-deploy">
+      <param name="manager.host" value="pelargir"/>
+    </antcall>
+    <antcall target="remote-deploy">
+      <param name="manager.host" value="timaru"/>
+    </antcall>
+  </target>
+
+  <!-- LOCAL DEPLOY -->
+  <target name="local-deploy" description="Deploy webapp to local dir (farm)">
+    <echo level="info" message="war = 'file://${dist}/${appName}.war'"/>
+    <copy file="${dist}/${appName}.war" todir="${local.farm.dir}"/>
+  </target>
+  <target name="local-singleton" description="Deploy webapp to local dir (singleton)">
+    <echo level="info" message="war = 'file://${dist}/${appName}.war'"/>
+    <copy file="${dist}/${appName}.war" todir="${local.singleton.dir}"/>
+  </target>
+
+  <!-- REMOTE RE-DEPLOY -->
+  <target name="remote-redeploy"
+      description="Undeploy and then redeploy webapp to remote tomcat">
+    <antcall target="remote-undeploy"/>
+    <waitfor maxwait="1000" maxwaitunit="millisecond">
+      <equals arg1="1" arg2="2"/>
+    </waitfor>
+    <antcall target="remote-deploy"/>
+  </target>
+
+  <target name="farm-jsch">
+    <scp passphrase="" keyfile="${user.home}/.ssh/id_dsa"
+      file="${dist}/${appName}.war"
+      todir="tomcat@${jboss.remote.host}:jboss/server/all/farm"/>
+  </target>
+  <target name="singleton-jsch">
+    <scp passphrase="" keyfile="${user.home}/.ssh/id_dsa"
+      file="${dist}/${appName}.war"
+      todir="tomcat@${jboss.remote.host}:jboss/server/all/deploy"/>
+  </target>
+  <target name="farm">
+    <echo message="Farm deployment to ${jboss.remote.host}"/>
+    <exec executable="scp">
+      <arg value="-B"/>
+      <arg value="${dist}/${appName}.war"/>
+      <arg value="tomcat@${jboss.remote.host}:jboss/server/all/farm"/>
+    </exec>
+  </target>
+  <target name="singleton">
+    <echo message="Singleton deployment to ${jboss.remote.host}"/>
+    <exec executable="scp">
+      <arg value="-B"/>
+      <arg value="${dist}/${appName}.war"/>
+      <arg value="tomcat@${jboss.remote.host}:jboss/server/all/deploy-hasingleton"/>
+    </exec>
+  </target>
+
+</project>

@@ -1,0 +1,40 @@
+<jboss-web>
+  <resource-ref>
+    <res-ref-name>libnet</res-ref-name>
+    <jndi-name>java:/jdbc/authzt</jndi-name>
+  </resource-ref>
+  <resource-ref>
+     <res-ref-name>db2</res-ref-name>
+     <jndi-name>java:/jdbc/actDB2</jndi-name>
+  </resource-ref>
+  <resource-ref>
+     <res-ref-name>billing</res-ref-name>
+     <jndi-name>java:/jdbc/billing</jndi-name>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>clusterHostName</res-ref-name>
+    <jndi-name>java:/env/clusterHostName</jndi-name>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>clusterSharedPath</res-ref-name>
+    <jndi-name>java:/env/clusterSharedPath</jndi-name>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>billing/ftpsServer</res-ref-name>
+    <jndi-name>java:/env/billingServer/hostname</jndi-name>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>billing/ftpsUsername</res-ref-name>
+    <jndi-name>java:/env/billingServer/username</jndi-name>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>billing/ftpsPassword</res-ref-name>
+    <jndi-name>java:/env/billingServer/password</jndi-name>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>billing/ftpsPath</res-ref-name>
+    <jndi-name>java:/env/billingServer/path</jndi-name>
+  </resource-ref>
+  <!-- LOGIN MODULE -->
+  <security-domain>java:/jaas/ad-login-module</security-domain>
+</jboss-web>

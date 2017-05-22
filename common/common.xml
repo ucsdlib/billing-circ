@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<!-- XXX:
+
+need to be able to include both shared libs and app-specific libs
+need to be albe to include other dirs (html, jsp, xml, etc.), not just root...
+	==> use nested filesets
+
+-->
+<!-- Shared Ant properties and tasks -->
+<project name="common">
+
+<!-- expected from the calling build.xml:
+
+  <property name="appName" value="stafflist"/>
+
+ <property file="${user.home}/build.properties"/>
+  <property file="${basedir}/build.properties"/> 
+ 
+
+  <property name="src"       value="${basedir}/src"/>
+  <property name="java"      value="${src}/java"/>
+  <property name="props"     value="${src}/properties"/>
+  <property name="lib"       value="${src}/lib"/>
+  <property name="metainf"   value="${src}/metainf"/>
+  <property name="root"      value="${src}/root"/>
+  <property name="webinf"    value="${src}/webinf"/>
+
+  <property name="dist"      value="${basedir}/dist"/>
+  <property name="tmp"       value="${basedir}/tmp"/>
+
+  <path id="classpath">
+    <fileset id="lib">
+      ...
+    </fileset>
+  </path>
+
+  <fileset id="root">
+  </fileset>
+
+-->
+
+  <!-- imports -->
+  <import file="profile.xml"/>
+  <import file="remote.xml"/>
+  <import file="version.xml"/>
+
+  <!-- temp directories -->
+  <property name="api"       value="${basedir}/doc/api"/>
+  <property name="filtered"  value="${tmp}/filtered"/>
+  <property name="webapp"    value="${tmp}/webapp"/>
+
+
+  <!-- clean -->
+  <target name="clean" description="Delete generated directories">
+    <delete dir="${tmp}"/>
+  </target>
+
+
+  <!-- distclean -->
+  <target name="distclean" description="Delete WAR files">
+    <delete dir="${dist}"/>
+    <delete dir="${tmp}"/>
+  </target>
+
+
+  <!-- prepare -->
+  <target name="prepare" description="Create output directories.">
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${tmp}"/>
+    <mkdir dir="${api}"/>
+    <mkdir dir="${filtered}"/>
+    <mkdir dir="${webapp}/META-INF"/>
+    <mkdir dir="${webapp}/WEB-INF"/>
+    <mkdir dir="${webapp}/WEB-INF/lib"/>
+    <mkdir dir="${webapp}/WEB-INF/classes"/>
+  </target>
+
+
+  <!-- compile -->
+  <target name="compile" description="Compile Java classes."
+      depends="prepare,version,version-properties">
+    <!-- filter source code -->
+    <copy todir="${filtered}">
+      <fileset dir="${java}" includes="**/*.java"/>
+      <fileset dir="${java}" includes="**/*.properties"/>
+      <fileset dir="${props}" includes="**/*.properties"/>
+      <filterset refid="profile-filters"/>
+      <filterset refid="version-filters"/>
+    </copy>
+
+    <!-- compile -->
+    <javac destdir="${webapp}/WEB-INF/classes" srcdir="${filtered}"
+        deprecation="on" debug="true" debuglevel="lines,source" target="1.5"
+        includeantruntime="false" source="1.5">
+      <classpath refid="classpath"/>
+      <!-- <compilerarg line="-Xlint:unchecked"/> -->
+    </javac>
+
+    <!-- copy properties and jar files -->
+    <copy todir="${webapp}/WEB-INF/lib">
+      <fileset refid="lib"/>
+      <fileset refid="extlib"/>
+      <fileset refid="compile-only3"/>
+    </copy>
+    <copy todir="${webapp}/WEB-INF/classes">
+      <fileset dir="${filtered}" includes="**/*.properties"/>
+    </copy>
+  </target>
+
+
+  <!-- doc -->
+  <target name="doc" description="Copy root and webinf files." depends="prepare">
+    <copy todir="${webapp}/META-INF">
+      <fileset dir="${metainf}" includes="**/*"/>
+      <filterset refid="profile-filters"/>
+      <filterset refid="version-filters"/>
+    </copy>
+    <copy todir="${webapp}/WEB-INF">
+      <fileset dir="${webinf}" includes="**/*"/>
+      <filterset refid="profile-filters"/>
+      <filterset refid="version-filters"/>
+    </copy>
+    <copy todir="${webapp}">
+      <fileset dir="${root}" includes="**/*"/>
+    </copy>
+  </target>
+
+
+  <!-- build -->
+  <target name="build" description="Build webapp components"
+    depends="clean,prepare,compile,doc">
+  </target>
+
+
+  <!-- webapp -->
+  <target name="webapp" description="Build WAR file" depends="build">
+    <!-- move old war file out of the way -->
+    <move file="${dist}/${appName}.war" tofile="${dist}/${appName}.bak"
+      failonerror="false"/>
+
+    <!-- generate new war file -->
+    <war destfile="${dist}/${appName}.war" webxml="${webapp}/WEB-INF/web.xml">
+      <fileset dir="${webapp}">
+        <exclude name="WEB-INF/**"/>
+        <exclude name="META-INF/**"/>
+      </fileset>
+      <webinf dir="${webapp}/WEB-INF" excludes="web.xml"/>
+      <metainf dir="${webapp}/META-INF"/>
+    </war>
+  </target>
+
+
+  <!-- deploy war file to remote tomcat -->
+  <target name="deploy" description="Deploy WAR file to remote tomcat">
+    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"
+        classpathref="classpath"/>
+    <input addproperty="manager.host" message="Deploy target hostname:"/>
+    <deploy url="http://${manager.host}:8080/manager"
+        username="${manager.user}" password="${manager.pass}"
+        path="/${appName}" war="file://${dist}/${appName}.war"/>
+  </target>
+
+
+  <!-- javadoc -->
+  <target name="javadoc" depends="prepare,compile">
+    <javadoc destdir="${api}" packagenames="edu.ucsd.library.*"
+        breakiterator="yes">
+      <classpath refid="classpath"/>
+      <sourcepath>
+        <pathelement location="${filtered}"/>
+      </sourcepath>
+      <link href="http://java.sun.com/j2se/1.4.1/docs/api/"/>
+      <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+    </javadoc>
+  </target>
+
+
+  <!-- XXX: javadoc, pmd, checkstyle, etc. -->
+
+</project>

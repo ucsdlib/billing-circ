@@ -1,0 +1,152 @@
+/*
+ * CSS for main bursar screen
+ * Authors: 
+ *		
+ *		Matthew Critchlow
+*/
+body {
+	background:#4e71b9 url(../images/body_gradient.gif) top left repeat-x !important;
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+	text-align: center;
+}
+.container{
+	margin:0px auto;
+	/*width:73.8432em;*/
+	width:61.8432em;
+	/**width:72.014em;*/
+	*width:60em;
+	text-align:left;
+	min-width:960px;
+	/* IE Dynamic Expression to set the width */
+	width:expression(document.body.clientWidth < 1000 ? "960px" : "960px" );
+	margin-top: 15px;
+	 *margin-top: 0px;
+	margin-bottom: 30px;
+	 *margin-bottom: 0px;
+}
+/* Title and subtitle */
+h1 {
+	font-size: 50px;
+	color : #EEEEEE;
+	padding-right: 100px; 
+	letter-spacing: 10px;
+	text-align: center;
+}
+h2 {
+	font-size: 25px;
+	color : #FFFFFF;
+	padding-left: 50px;
+	letter-spacing: 2px;
+	text-align: center;
+}
+span.dateFormat{
+	color: #FF0000;
+	font-weight: bold;
+	display:none;
+}
+.header { 
+    font-size:85%;
+    background: url(../images/header_background.gif) bottom left repeat-x;
+    padding-bottom:9px;
+}
+.footer {
+    clear:both;
+    background:#f3f3f3 url(../images/footer_gradient.gif) top left repeat-x;
+    padding:25px 15px 15px 15px;
+    font-size:77%;
+}
+.data_container {
+	background:#fff;
+	clear:both;
+	padding:15px 0x 55px 0px;
+	width: 100%;
+}
+#dateRange{
+	margin:10px;
+}
+#actions p, #dateRange p, #results p{
+	margin:10px;
+}
+#emptyTable{
+	margin:10px;
+	font-style:bold;
+	text-align:center;
+	color: #FF0000;
+}
+
+
+/** FIELDSETS **/
+#actions fieldset, #dateRange fieldset, #results fieldset{
+	border: 2px #4e71b9 solid;
+}
+#actions{
+	padding-bottom: 10px;
+	margin:10px 10px 0px 10px;
+}
+
+/* GRID */
+/* This makes the scrolling table work */
+
+#grid {
+	height: 500px;	
+    overflow: auto;
+	/*width: 970px;*/
+	width: 100%;
+	/*margin: 15px 0 0 0;*/
+	margin: 0;
+	position: relative;
+}
+
+/* The different widths below are due to the way the scroll bar is implamented
+we are keeping these here instead of putting them in the IE css file b/c it 
+is easier to change the width if both numbers are in the same place. */
+
+/* All browsers accept this, but we are targeting IE with this rule */
+#grid table {
+	width:61.8432em;
+	border-collapse: collapse;
+	font-size: 70%;
+}
+
+/* Modern browsers accept this (not IE) and we are targetting firefox */
+html>/**/body #grid table {
+    /*width: 99%; */
+    width:61.8432em;
+}
+
+/* Modern browsers accept this (not IE) and we are targetting firefox */
+html>/**/body #grid table>tbody	{  
+    overflow: auto; 
+    height: 500x;
+    overflow-x: hidden;
+}
+
+#grid thead tr	{
+	/*position:relative;*/
+}
+
+/*prevent Mozilla scrollbar from hiding cell content*/
+d#grid td:last-child {padding-right: 20px;}
+
+table.dataGrid{
+	margin: 10px;
+}
+table.dataGrid th{
+	background: #3e83c9;
+	color: #fff;
+	font-weight: bold;
+	padding: 2px 2px;
+	text-align: left;
+	border-right: 1px solid #fff;
+	line-height: 2.2;
+}
+table.dataGrid td {
+	padding: 6px 11px;
+	border-bottom: 1px solid #95bce2;
+	vertical-align: top;
+}
+table.dataGrid td * {
+	padding: 6px 11px;
+}
+table.dataGrid tr.even td { background-color: #ecf6fc; }
+table.dataGrid tr.over td { background-color: #bcd4ec; }

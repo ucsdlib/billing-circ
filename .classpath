@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="src/lib/" kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/jar_repository/servlet.jar"/>
+	<classpathentry kind="lib" path="/jar_repository/json_simple.jar"/>
+	<classpathentry kind="lib" path="/jar_repository/dom4j-full.jar"/>
+	<classpathentry kind="lib" path="/jar_repository/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="/jar_repository/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="src/lib/db2jcc_license_cu.jar"/>
+	<classpathentry kind="lib" path="src/lib/db2jcc.jar"/>
+	<classpathentry kind="lib" path="src/lib/jconn.jar"/>
+	<classpathentry kind="lib" path="/jar_repository/commons-lang-2.3.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

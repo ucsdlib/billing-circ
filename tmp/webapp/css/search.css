@@ -1,0 +1,96 @@
+/*
+ * CSS for  seach screen
+ * Authors: 
+ *		
+ *		Chandana Kapugama Arachchige
+*/
+body {
+	background:#4e71b9 url(../images/body_gradient.gif) top left repeat-x !important;
+	font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;
+	text-align: center;
+}
+.container{
+	margin:0px auto;
+	/*width:73.8432em;*/
+	width:61.8432em;
+	/**width:72.014em;*/
+	*width:60em;
+	text-align:left;
+	min-width:960px;
+	/* IE Dynamic Expression to set the width */
+	width:expression(document.body.clientWidth < 1000 ? "960px" : "960px" );
+	margin-top: 15px;
+	 *margin-top: 0px;
+	margin-bottom: 30px;
+	 *margin-bottom: 0px;
+}
+
+/* Title and subtitle */
+h1 {
+	font-size: 50px;
+	color : #EEEEEE;
+	padding-right: 100px; 
+	letter-spacing: 10px;
+	text-align: center;
+}
+h2 {
+	font-size: 25px;
+	color : #FFFFFF;
+	padding-left: 50px;
+	letter-spacing: 2px;
+	text-align: center;
+}
+
+.header { 
+    font-size:85%;
+    background: url(../images/header_background.gif) bottom left repeat-x;
+    padding-bottom:9px;
+}
+.footer {
+    clear:both;
+    background:#f3f3f3 url(../images/footer_gradient.gif) top left repeat-x;
+    padding:25px 15px 15px 15px;
+    font-size:77%;
+}
+.data_container2 {
+	background:#fff;
+	clear:both;
+	padding:15px 0x 55px 0px;
+	width: 100%;
+	font-weight: bold;
+	text-align:center;padding-bottom: 20px;padding-top: 10px;
+}
+#search{
+	background:#fff;
+	clear:both;
+	font-weight: bold;
+	padding: 2px 2px;
+	border-right: 1px solid #fff;
+	line-height: 2.2;
+	text-align:center;padding-bottom: 10px;padding-top: 10px;
+}
+
+#searchby
+{
+	background:#fff;
+	clear:both;
+	font-weight: bold;
+	padding: 2px 2px;
+	border-right: 1px solid #fff;
+	line-height: 2.2;
+	text-align:center;padding-bottom:10px;padding-top: 10px;
+}
+#result2
+{
+		background:#fff;
+	clear:both;
+	font-weight: bold;
+	padding: 2px 2px;
+	border-right: 1px solid #fff;
+	line-height: 2.2;
+	text-align:center;padding-bottom: 20px;padding-top: 10px;
+	}
+#radio
+{
+	font-weight: regular;
+}

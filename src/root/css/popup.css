@@ -1,0 +1,48 @@
+table.dataGrid{
+	margin: 10px;
+	boarder : 1;
+}
+table.dataGrid th{
+	background: #3e83c9;
+	color: #fff;
+	font-weight: bold;
+	padding: 2px 2px;
+	text-align: left;
+	border-right: 1px solid #fff;
+	line-height: 2.2;
+}
+table.dataGrid td {
+	padding: 6px 11px;
+	border-bottom: 1px solid #95bce2;
+	vertical-align: top;
+}
+table.dataGrid td * {
+	padding: 6px 11px;
+}
+table.dataGrid tr.even td { background-color: #ecf6fc; }
+table.dataGrid tr.over td { background-color: #bcd4ec; }
+#transaction th{
+	background: #3e83c9;
+	color: #fff;
+	font-weight: bold;
+	padding: 2px 2px;
+	text-align: left;
+	border-right: 1px solid #fff;
+	line-height: 2.2;
+	font-size : 75%; 
+}
+#transaction td {
+	padding: 6px 11px;
+	border-bottom: 1px solid #95bce2;
+	vertical-align: top;
+	font-size : 75%; 
+}
+
+#transaction tr.even td { background-color: #ecf6fc; font-size : 75%; }
+#transaction tr.over td { background-color: #bcd4ec;font-size : 75%; }
+
+#transaction{
+	overflow: auto;
+	position :relative;
+	height: 100px;
+	}	

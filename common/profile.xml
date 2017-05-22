@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!-- Profile-based filtering for host names, file paths, etc. -->
+<project name="profile">
+
+  <!-- load profile -->
+  <property file="${profile}"/>
+
+  <!-- filterset -->
+  <filterset id="profile-filters">
+
+    <!-- profile -->
+    <filter token="clusterHostName"     value="${clusterHostName}"/>
+    <filter token="clusterSharedPath"   value="${clusterSharedPath}"/>
+    <filter token="transportGuarantee"  value="${transportGuarantee}"/>
+
+  </filterset>
+
+</project>
