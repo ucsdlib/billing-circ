@@ -56,7 +56,7 @@ $(function(){
 			
 			$('.container').hide(); //hide everything before new search
 			$.ajaxFileUpload({
-				url:"/billing/servlets/UploadBillingFile", 
+				url:"/billing-circ/servlets/UploadBillingFile", 
 				secureuri:true,
 				fileElementId:'fileToUpload',
 				fileArk: '',
@@ -75,7 +75,7 @@ $(function(){
 		
 		//logout
 		$("#logout").bind("click",function(){
-			window.location = "/billing/logout.jsp";
+			window.location = "/billing-circ/logout.jsp";
 		});
 		
 		$("#homeTab").bind("click",function(){
@@ -102,7 +102,7 @@ $(function(){
 			$('#bursarDiv').hide();
 			$("#emptyTable").empty(); 
 			$.ajax({
-				url: "/billing/servlets/GetSessionDates", 
+				url: "/billing-circ/servlets/GetSessionDates", 
 				dataType: 'json',
 				success: displaySessionDates,
 				error:function (data, status, e){
@@ -128,7 +128,7 @@ $(function(){
 			//alert(selectedVal1);
 			//alert(searchCriteria);
 			$.ajax({
-				url: "/billing/servlets/GetSessionResults", 
+				url: "/billing-circ/servlets/GetSessionResults", 
 				dataType: 'json',
 				data:{selectedVal:selectedVal},
 				success: function(data){
@@ -164,7 +164,7 @@ $(function(){
 				 
 				 //==========================
 				 $.ajax({
-						url: "/billing/servlets/ResubmitData", 
+						url: "/billing-circ/servlets/ResubmitData", 
 						dataType: 'json',
 						data: {invoiceArr:myString},
 						success: displayAfterResubmit,
@@ -228,7 +228,7 @@ $(function(){
 			$.blockUI({ message: '<img src="images/busy.gif" /> Getting Data...' });
 			//alert(searchCriteria);
 			$.ajax({
-				url: "/billing/servlets/GetSearchResults", 
+				url: "/billing-circ/servlets/GetSearchResults", 
 				dataType: 'json',
 				data:{searchval:searchval,searchCriteria:searchCriteria},
 				success: displaySearchResults,
@@ -257,7 +257,7 @@ $(function(){
 				 //alert(tokensPending);
 				
 				 $.ajax({
-						url: "/billing/servlets/GetPatronHistory", 
+						url: "/billing-circ/servlets/GetPatronHistory", 
 						dataType: 'json',
 						data: {patronNo:tokensPending},
 						success: displayPatronHistoryWindow,
@@ -331,7 +331,7 @@ $(function(){
 			
 			//===ajax call to get data related to that record==============
 			 $.ajax({
-					url: "/billing/servlets/GetSessionData", 
+					url: "/billing-circ/servlets/GetSessionData", 
 					dataType: 'json',
 					data: {invoiceArr:myString},
 					success: displayNewPQueue,						
@@ -363,7 +363,7 @@ $(function(){
 			
 			//===ajax call to get data related to that record==============
 			 $.ajax({
-					url: "/billing/servlets/GetSessionData", 
+					url: "/billing-circ/servlets/GetSessionData", 
 					dataType: 'json',
 					data: {invoiceArr:myString},
 					success: displayProbQueue,						
@@ -380,7 +380,7 @@ $(function(){
 		
 		//logout
 		$("#logout").bind("click",function(){
-			window.location = "/billing/logout.jsp";
+			window.location = "/billing-circ/logout.jsp";
 		});
 		
 		$("#processOutputFile").bind("click",function(){
@@ -460,7 +460,7 @@ $(function(){
 			  {
 			 $.blockUI({ message: '<img src="images/busy.gif" /> Sending Data...' });
 			 $.ajax({
-					url: "/billing/servlets/SendOutputFiles", 
+					url: "/billing-circ/servlets/SendOutputFiles", 
 					dataType: 'json',
 					data:{username:username,password:temp},
 					success: displaySendFileLog,
@@ -554,7 +554,7 @@ $(function(){
 		 if (agree)
 		 	{
 			 $.ajax({
-					url: "/billing/servlets/ModifyQueues", 
+					url: "/billing-circ/servlets/ModifyQueues", 
 					dataType: 'json',
 					data: {invoiceArr:myString,whichQueue:'P'},
 					success: displayPendingQueueAfterDelete,
@@ -581,7 +581,7 @@ $(function(){
 		 if (agree)
 		 	{
 			 $.ajax({
-					url: "/billing/servlets/ModifyQueues", 
+					url: "/billing-circ/servlets/ModifyQueues", 
 					dataType: 'json',
 					data: {invoiceArr:myString,whichQueue:'Q'},
 					success: displayProblemQueueAfterDelete,
@@ -607,7 +607,7 @@ $(function(){
 		 if (agree)
 		 	{
 			 $.ajax({
-					url: "/billing/servlets/ModifyQueues", 
+					url: "/billing-circ/servlets/ModifyQueues", 
 					dataType: 'json',
 					data: {invoiceArr:myString,whichQueue:'N'},
 					success: displayNewPatronQueueAfterDelete,
@@ -690,7 +690,7 @@ $(function(){
 				 
 				 //==========================
 				 $.ajax({
-						url: "/billing/servlets/MoveToOtherQueues", 
+						url: "/billing-circ/servlets/MoveToOtherQueues", 
 						dataType: 'json',
 						data: {invoiceArr:myString,whichQueue:'P'},
 						success: displayPendingQueueAfterDelete,
@@ -722,7 +722,7 @@ $(function(){
 				 
 				 //==========================
 				 $.ajax({
-						url: "/billing/servlets/MoveToOtherQueues", 
+						url: "/billing-circ/servlets/MoveToOtherQueues", 
 						dataType: 'json',
 						data: {invoiceArr:myString,whichQueue:'Q'},
 						success: displayProblemQueueAfterDelete,
@@ -756,7 +756,7 @@ $(function(){
 				 displayEditWindow(valArray);
 				//===ajax call to get data related to that record==============
 				 $.ajax({
-						url: "/billing/servlets/GetNewPatronData", 
+						url: "/billing-circ/servlets/GetNewPatronData", 
 						dataType: 'json',
 						data: {invoiceArr:myString},
 						success: displayEditWindow,
@@ -791,7 +791,7 @@ $(function(){
 				 
 				 //==========================
 				 $.ajax({
-						url: "/billing/servlets/MoveToOtherQueues", 
+						url: "/billing-circ/servlets/MoveToOtherQueues", 
 						dataType: 'json',
 						data: {invoiceArr:myString,whichQueue:'N'},
 						success: displayNewPatronQueueAfterDelete,
@@ -821,7 +821,7 @@ $(function(){
 						
 				//===ajax call to get data related to that record==============
 				 $.ajax({
-						url: "/billing/servlets/GetProblemQueueData", 
+						url: "/billing-circ/servlets/GetProblemQueueData", 
 						dataType: 'json',
 						data: {invoiceArr:myString},
 						success: displayEditWindowForProblemQueue,						
@@ -926,7 +926,7 @@ $(function(){
 				ajaxParams = ajaxParams + sep + "endDate="+endDate;
 			}
 			$.ajax({
-				url: "/billing/servlets/GetBursarData",
+				url: "/billing-circ/servlets/GetBursarData",
 				//url: "json.txt",
 				dataType: "json",
 				data: ajaxParams,
@@ -1021,7 +1021,7 @@ $(function(){
 		);	
 	}
 	function processBursarFile(){
-		window.open("/billing/servlets/ProcessBursarData");
+		window.open("/billing-circ/servlets/ProcessBursarData");
 	}
 	
 	
@@ -1148,10 +1148,10 @@ $(function(){
 	   //html += '$().ajaxStart($.blockUI).ajaxStop($.unblockUI);';
 	  
 	   //9/14
-	   //var ajaxcall = '$.ajax({url: "/billing/servlets/GetInvoiceNotes", dataType: "json",data:{invNo:invNo},success:function(data){ $.unblockUI();if(data.sizeInvoiceNoteArray === 0) {$("#addNote").empty();var tableBody =$("<tbody></tbody>").html("No data");var p = $("<p></p>").html(tableBody);$("#addNote").append(p);return true;} else {var tableBody =$("<tbody></tbody>");$("#addNote").empty(); $.each(data["invoiceNoteArray"],function(){ var row =  $("<tr></tr>");var col1 =  $("<td></td>").html(this.date);col1.css("padding", "6px 11px"); var col2 =  $("<td></td>").html(this.username);col2.css("padding", "6px 11px");var col3 =  $("<td></td>").html(this.notes);row.append(col1).append(col2).append(col3);tableBody.append(row);}); var p = $("<p></p>").html(tableBody); $("#addNote").append(p);return true;}},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling GetInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
+	   //var ajaxcall = '$.ajax({url: "/billing-circ/servlets/GetInvoiceNotes", dataType: "json",data:{invNo:invNo},success:function(data){ $.unblockUI();if(data.sizeInvoiceNoteArray === 0) {$("#addNote").empty();var tableBody =$("<tbody></tbody>").html("No data");var p = $("<p></p>").html(tableBody);$("#addNote").append(p);return true;} else {var tableBody =$("<tbody></tbody>");$("#addNote").empty(); $.each(data["invoiceNoteArray"],function(){ var row =  $("<tr></tr>");var col1 =  $("<td></td>").html(this.date);col1.css("padding", "6px 11px"); var col2 =  $("<td></td>").html(this.username);col2.css("padding", "6px 11px");var col3 =  $("<td></td>").html(this.notes);row.append(col1).append(col2).append(col3);tableBody.append(row);}); var p = $("<p></p>").html(tableBody); $("#addNote").append(p);return true;}},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling GetInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
 	  
 	   
-	   var ajaxcall = '$.ajax({url: "/billing/servlets/GetInvoiceNotes", dataType: "json",data:{invNo:invNo},success:function(data){ $.unblockUI();if(data.sizeInvoiceNoteArray === 0) {$("#addNote").empty();var tableBody =$("<tbody></tbody>").html("No data");var p = $("<p></p>").html(tableBody);$("#addNote").append(p);return true;} else {var tableBody =$("<tbody></tbody>");$("#addNote").empty(); $.each(data["invoiceNoteArray"],function(){ var row =  $("<tr></tr>");var col1 =  $("<td></td>").html(this.date);col1.css("padding", "6px 11px"); var col2 =  $("<td></td>").html(this.username);col2.css("padding", "6px 11px");var col3 =  $("<td></td>").html(this.notes);col3.css("padding", "6px 11px");var col4 =  $("<td></td>").html(this.expDesc);col4.css("padding", "6px 11px");var col5 =  $("<td></td>").html(this.comDesc);col5.css("padding", "6px 11px");var col6 =  $("<td></td>").html(this.resDesc);col6.css("padding", "6px 11px"); row.append(col1).append(col2).append(col3).append(col4).append(col5).append(col6);tableBody.append(row);}); var p = $("<p></p>").html(tableBody); $("#addNote").append(p);$("#addNote").css("overflow", "auto");$("#addNote").css("position", "relative");$("#addNotetr:even").addClass("even");$("#addNotetr").hover(function(){$(this).addClass("over");}, function(){$(this).removeClass("over");});return true;}},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling GetInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
+	   var ajaxcall = '$.ajax({url: "/billing-circ/servlets/GetInvoiceNotes", dataType: "json",data:{invNo:invNo},success:function(data){ $.unblockUI();if(data.sizeInvoiceNoteArray === 0) {$("#addNote").empty();var tableBody =$("<tbody></tbody>").html("No data");var p = $("<p></p>").html(tableBody);$("#addNote").append(p);return true;} else {var tableBody =$("<tbody></tbody>");$("#addNote").empty(); $.each(data["invoiceNoteArray"],function(){ var row =  $("<tr></tr>");var col1 =  $("<td></td>").html(this.date);col1.css("padding", "6px 11px"); var col2 =  $("<td></td>").html(this.username);col2.css("padding", "6px 11px");var col3 =  $("<td></td>").html(this.notes);col3.css("padding", "6px 11px");var col4 =  $("<td></td>").html(this.expDesc);col4.css("padding", "6px 11px");var col5 =  $("<td></td>").html(this.comDesc);col5.css("padding", "6px 11px");var col6 =  $("<td></td>").html(this.resDesc);col6.css("padding", "6px 11px"); row.append(col1).append(col2).append(col3).append(col4).append(col5).append(col6);tableBody.append(row);}); var p = $("<p></p>").html(tableBody); $("#addNote").append(p);$("#addNote").css("overflow", "auto");$("#addNote").css("position", "relative");$("#addNotetr:even").addClass("even");$("#addNotetr").hover(function(){$(this).addClass("over");}, function(){$(this).removeClass("over");});return true;}},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling GetInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
 	   html += ajaxcall;
 	   //html += 'testA();';
 	   html+=  'return false;}else{alert("Please select one record at a time");}}//end of getNote()';
@@ -1181,7 +1181,7 @@ $(function(){
 	    html += 'document.getElementById("txtNewNote").value= " ";';
 	    html += 'document.getElementById("txtStaff").value= " ";';
 	    //html += 'document.getElementById("txtDate").value= " ";';
-	    var ajaxStat = '$.ajax({url: "/billing/servlets/InsertInvoiceNotes",dataType: "json",data:{strUserId:strUserId,inv:inv,strNote:strNote,strexp:strexp,strres:strres,strcom:strcom},success: function(data){if (data.flag === true)alert("Successfully inserted!"); else alert("Error in Insertion!");},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling InsertInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
+	    var ajaxStat = '$.ajax({url: "/billing-circ/servlets/InsertInvoiceNotes",dataType: "json",data:{strUserId:strUserId,inv:inv,strNote:strNote,strexp:strexp,strres:strres,strcom:strcom},success: function(data){if (data.flag === true)alert("Successfully inserted!"); else alert("Error in Insertion!");},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling InsertInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
 	   // html += 'window.opener.insertInvoinceNote(strUserId,inv,strNote,strexp,strres,strcom);';
 	    html += ajaxStat;
 	    html += 'return true;}//end of function AddNewNotes';
@@ -1282,7 +1282,7 @@ function saveDataFromViewPatronHistory(pid,strpatron,strnote,flagPID,flagNote,fl
 		}
 	
 	$.ajax({
-		url: "/billing/servlets/ModifyBasicDataPatHistory", 
+		url: "/billing-circ/servlets/ModifyBasicDataPatHistory", 
 		dataType: 'json',
 		data: {pid:pid,note:strnote,patronNo:strpatron,flagPID:flagPID,flagNote:flagNote,flagPatron:flagPatron,oldPatronNo:ppat},
 		success: displayPatronHistoryAfterEdit,
@@ -1313,7 +1313,7 @@ function displayPatronHistoryAfterEdit(data,status){
 	
 	//alert(searchCriteria);
 	$.ajax({
-		url: "/billing/servlets/GetSearchResults", 
+		url: "/billing-circ/servlets/GetSearchResults", 
 		dataType: 'json',
 		data:{searchval:searchval,searchCriteria:searchCriteria},
 		success: displaySearchResults,
@@ -1842,10 +1842,10 @@ function displayPendingQueueConfirmNoNewPatron(jsonData){
 	}
 	*/
 	function processOutputFile(){
-		window.open("/billing/servlets/ProcessOutputData");
+		window.open("/billing-circ/servlets/ProcessOutputData");
 	}
   function sendDataToServer(){
-	  window.open("/billing/servlets/SendOutputFiles");
+	  window.open("/billing-circ/servlets/SendOutputFiles");
   }
 	
 function displayPendingQueueAfterDelete(data,status){
@@ -2083,7 +2083,7 @@ function displayEditWindowForProblemQueue(data,status){
    //html += 'window.opener.getInvoiceNotes(invNo); ';
    html += '$.blockUI({ message:"Getting invoice notes..." });';
    //html += '$().ajaxStart($.blockUI).ajaxStop($.unblockUI);';
-   var ajaxcall = '$.ajax({url: "/billing/servlets/GetInvoiceNotes", dataType: "json",data:{invNo:invNo},success:function(data){ $.unblockUI();if(data.sizeInvoiceNoteArray === 0) {$("#addNote").empty();var tableBody =$("<tbody></tbody>").html("No data");var p = $("<p></p>").html(tableBody);$("#addNote").append(p);return true;} else {var tableBody =$("<tbody></tbody>");$("#addNote").empty(); $.each(data["invoiceNoteArray"],function(){ var row =  $("<tr></tr>");var col1 =  $("<td></td>").html(this.date);col1.css("padding", "4px 8px"); var col2 =  $("<td></td>").html(this.username);col2.css("padding", "6px 11px");var col3 =  $("<td></td>").html(this.notes);col3.css("padding", "6px 11px");var col4 =  $("<td></td>").html(this.expDesc);col4.css("padding", "6px 11px");var col5 =  $("<td></td>").html(this.comDesc);col5.css("padding", "6px 11px");var col6 =  $("<td></td>").html(this.resDesc);col6.css("padding", "6px 11px"); row.append(col1).append(col2).append(col3).append(col4).append(col5).append(col6);tableBody.append(row);}); var p = $("<p></p>").html(tableBody); $("#addNote").append(p);$("#addNote").css("overflow", "auto");$("#addNote").css("position", "relative");$("#addNotetr:even").addClass("even");$("#addNotetr").hover(function(){$(this).addClass("over");}, function(){$(this).removeClass("over");});return true;}},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling GetInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
+   var ajaxcall = '$.ajax({url: "/billing-circ/servlets/GetInvoiceNotes", dataType: "json",data:{invNo:invNo},success:function(data){ $.unblockUI();if(data.sizeInvoiceNoteArray === 0) {$("#addNote").empty();var tableBody =$("<tbody></tbody>").html("No data");var p = $("<p></p>").html(tableBody);$("#addNote").append(p);return true;} else {var tableBody =$("<tbody></tbody>");$("#addNote").empty(); $.each(data["invoiceNoteArray"],function(){ var row =  $("<tr></tr>");var col1 =  $("<td></td>").html(this.date);col1.css("padding", "4px 8px"); var col2 =  $("<td></td>").html(this.username);col2.css("padding", "6px 11px");var col3 =  $("<td></td>").html(this.notes);col3.css("padding", "6px 11px");var col4 =  $("<td></td>").html(this.expDesc);col4.css("padding", "6px 11px");var col5 =  $("<td></td>").html(this.comDesc);col5.css("padding", "6px 11px");var col6 =  $("<td></td>").html(this.resDesc);col6.css("padding", "6px 11px"); row.append(col1).append(col2).append(col3).append(col4).append(col5).append(col6);tableBody.append(row);}); var p = $("<p></p>").html(tableBody); $("#addNote").append(p);$("#addNote").css("overflow", "auto");$("#addNote").css("position", "relative");$("#addNotetr:even").addClass("even");$("#addNotetr").hover(function(){$(this).addClass("over");}, function(){$(this).removeClass("over");});return true;}},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling GetInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
    html += ajaxcall;
    //html += 'testA();';
    html+=  'return false;}else{alert("Please select one record at a time");}}//end of getNote()';
@@ -2116,7 +2116,7 @@ function displayEditWindowForProblemQueue(data,status){
     html += 'document.getElementById("txtNewNote").value= " ";';
     html += 'document.getElementById("txtStaff").value= " ";';
     //html += 'document.getElementById("txtDate").value= " ";';
-    var ajaxStat = '$.ajax({url: "/billing/servlets/InsertInvoiceNotes",dataType: "json",data:{strUserId:strUserId,inv:inv,strNote:strNote,strexp:strexp,strres:strres,strcom:strcom},success: function(data){if (data.flag === true)alert("Successfully inserted!"); else alert("Error in Insertion!");},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling InsertInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
+    var ajaxStat = '$.ajax({url: "/billing-circ/servlets/InsertInvoiceNotes",dataType: "json",data:{strUserId:strUserId,inv:inv,strNote:strNote,strexp:strexp,strres:strres,strcom:strcom},success: function(data){if (data.flag === true)alert("Successfully inserted!"); else alert("Error in Insertion!");},error:function (data, status, e){$.unblockUI();$.blockUI({ message: "There was an error or timeout when calling InsertInvoiceNotes servlet" }); setTimeout($.unblockUI, 2000);}});';
    // html += 'window.opener.insertInvoinceNote(strUserId,inv,strNote,strexp,strres,strcom);';
     html += ajaxStat;
     html += 'return true;}//end of function AddNewNotes';
@@ -2207,7 +2207,7 @@ function test(varr)
 	}
 	else{
 	$.ajax({
-		url: "/billing/servlets/EditNewPatronData", 
+		url: "/billing-circ/servlets/EditNewPatronData", 
 		dataType: 'json',
 		data: {invoiceNo:invoiceNo,pid:pid},
 		success: displayNewPatronQueueAfterEdit,
@@ -2261,7 +2261,7 @@ function saveDataFromViewPatronHistory(pid,strpatron,strnote,flagPID,flagNote,fl
 		}
 	
 	$.ajax({
-		url: "/billing/servlets/ModifyBasicDataPatHistory", 
+		url: "/billing-circ/servlets/ModifyBasicDataPatHistory", 
 		dataType: 'json',
 		data: {pid:pid,note:strnote,patronNo:strpatron,flagPID:flagPID,flagNote:flagNote,flagPatron:flagPatron,oldPatronNo:ppat},
 		success: displayPatronHistoryAfterEdit,
@@ -2301,7 +2301,7 @@ function saveDataFromViewPatronHistory(pid,strpatron,strnote,flagPID,flagNote,fl
  function test(varr)
 {	
 	$.ajax({
-		url: "/billing/servlets/EditNewPatronData", 
+		url: "/billing-circ/servlets/EditNewPatronData", 
 		dataType: 'json',
 		data: {invoiceNo:invoiceNo,pid:pid},
 		success: displayNewPatronQueueAfterEdit,
@@ -2430,7 +2430,7 @@ function saveDataFromProbQueue(pid,strpatron,strnote,invoiceNo,flagPID,flagNote,
 	}
 	else{
 	$.ajax({
-		url: "/billing/servlets/EditProblemQueueData", 
+		url: "/billing-circ/servlets/EditProblemQueueData", 
 		dataType: 'json',
 		data: {invoiceNo:invoiceNo,pid:pid,note:strnote,patronNo:strpatron,flagPID:flagPID,flagNote:flagNote,flagPatron:flagPatron,oldPatronNo:ppat},
 		success: displayProblemQueueAfterEdit,
@@ -2470,7 +2470,7 @@ function displayProblemQueueAfterEdit(data,status){
 
 function insertInvoinceNote(strUserId,inv,strNote,strexp,strres,strcom) {
 	 $.ajax({
-			url: "/billing/servlets/InsertInvoiceNotes", 
+			url: "/billing-circ/servlets/InsertInvoiceNotes", 
 			dataType: 'json',
 			data:{strUserId:strUserId,inv:inv,strNote:strNote,strexp:strexp,strres:strres,strcom:strcom},
 			success: function(data){if (data.flag === 'true')alert("Successfully inserted!"); else alert("Error in Insertion!");},
@@ -2489,7 +2489,7 @@ function getInvoiceNotes(invNo) {
 	//invoiceNoteArrSize = -1;
 	$.blockUI();
 	    $.ajax({
-			url: "/billing/servlets/GetInvoiceNotes", 
+			url: "/billing-circ/servlets/GetInvoiceNotes", 
 			dataType: 'json',
 			data:{invNo:invNo},
 			success: setinvoiceNotesArray,
@@ -2560,7 +2560,7 @@ function getPassword(username,password) {
 	 $.blockUI({ message: '<img src="images/busy.gif" /> Sending Data...' });
 	 $.ajax({
 	 	  type: "POST",
-			url: "/billing/servlets/SendOutputFiles", 
+			url: "/billing-circ/servlets/SendOutputFiles", 
 			dataType: 'json',
 			data:{username:username,password:password},
 			success: displaySendFileLog,

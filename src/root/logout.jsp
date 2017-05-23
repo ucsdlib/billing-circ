@@ -1,4 +1,4 @@
 <%
 	session.invalidate();
-	response.sendRedirect("/billing/index.jsp");
+	response.sendRedirect("/billing-circ/index.jsp");
 %>

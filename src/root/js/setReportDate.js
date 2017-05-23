@@ -22,10 +22,10 @@ $(function(){
 			return false;
 		});
 		$("#logout").bind("click",function(){
-			window.location = "/billing/logout.jsp";
+			window.location = "/billing-circ/logout.jsp";
 		});
 		$("#goToBursar").bind("click",function(){
-			window.location = "/billing/bursar.jsp";
+			window.location = "/billing-circ/bursar.jsp";
 		});
 	}
 	/** MAKE SURE DATEFORMAT IS CORRECT TO SEND TO SERVER **/
@@ -55,7 +55,7 @@ $(function(){
 		var reportDate = $("#reportDate").val();
 		var ajaxParams = "reportDate="+reportDate;
 		$.ajax({
-			url: "/billing/servlets/UpdateReportDate",
+			url: "/billing-circ/servlets/UpdateReportDate",
 			dataType: "text",
 			data: ajaxParams,
 			error: function (xhr, desc, exceptionobj) {

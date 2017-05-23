@@ -30,7 +30,7 @@ $(function(){
 			return false;
 		});
 		$("#logout").bind("click",function(){
-			window.location = "/billing/logout.jsp";
+			window.location = "/billing-circ/logout.jsp";
 		});
 	}
 	/** MAKE SURE DATEFORMAT IS CORRECT TO SEND TO SERVER **/
@@ -81,7 +81,7 @@ $(function(){
 			ajaxParams = ajaxParams + sep + "endDate="+endDate;
 		}
 		$.ajax({
-			url: "/billing/servlets/GetBursarData",
+			url: "/billing-circ/servlets/GetBursarData",
 			//url: "json.txt",
 			dataType: "json",
 			data: ajaxParams,
@@ -161,6 +161,6 @@ $(function(){
 		);	
 	}
 	function processFile(){
-		window.open("/billing/servlets/ProcessBursarData");
+		window.open("/billing-circ/servlets/ProcessBursarData");
 	}
 });
