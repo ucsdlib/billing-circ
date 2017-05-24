@@ -225,7 +225,7 @@ public class ResubmitData extends HttpServlet {
 			//stmt = conn.createStatement();
 			for(int k=0;k<tokencount;k++)
 			{
-			//stmt.executeUpdate(" DELETE FROM BILLING.PENDING_HISTORY WHERE PENDINGID =" + "'" + temp[k] + "'");
+			//stmt.executeUpdate(" DELETE FROM PENDING_HISTORY WHERE PENDINGID =" + "'" + temp[k] + "'");
 				    PreparedStatement pstmt = conn.prepareStatement("DELETE FROM PENDING_HISTORY WHERE PENDINGID =?");
 				    pstmt.setString( 1,temp[k] );
 				    pstmt.execute();
