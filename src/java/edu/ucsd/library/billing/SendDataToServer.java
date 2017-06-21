@@ -1479,8 +1479,8 @@ public class SendDataToServer  {
 				try {
 					String patronNumberNew = patronNumber.substring(1);
 					  PreparedStatement pstmt = conn.prepareStatement(
-							    "INSERT INTO TRANSACTIONS ( TRANSACTIONNO,INVOICENO, INVOICEDATE,CHARGELOCATION,CHARGETYPE,CHARGE,PROCESSINGFEE,BILLINGFEE,PATRONNO,ITEMNO,ADDEDDATE,PROCESSDATE,USERID ) " +
-							    " values (?, ?, ?, ?, ? ,?,?,?,?,?,?,?,?)");
+							    "INSERT INTO TRANSACTIONS ( TRANSACTIONNO,INVOICENO, INVOICEDATE,CHARGELOCATION,CHARGETYPE,CHARGE,PROCESSINGFEE,BILLINGFEE,PATRONNO,ITEMNO,ADDEDDATE,USERID ) " +
+							    " values (?, ?, ?, ?, ? ,?,?,?,?,?,?,?)");
 					 
 					  String strInvDate ="20"+invoiceDate.substring(0,2)+"-"+invoiceDate.substring(2,4)+"-"+invoiceDate.substring(4);
 					  log.info("strInvDate"+strInvDate);
@@ -1507,8 +1507,7 @@ public class SendDataToServer  {
 					    pstmt.setString(9, patronNumberNew ); 
 					    pstmt.setString(10, itemNum ); 
 					  	pstmt.setDate( 11,when ); 
-					    pstmt.setDate( 12, when );
-					    pstmt.setString( 13, userID );
+					    pstmt.setString( 12, userID );
 					   					    
 					   // conn.commit();
 					    log.info("+++++++ INSERTING INTO TRANSACTIONS +++++++++++++");
