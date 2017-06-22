@@ -65,6 +65,7 @@ public class SendDataToServer  {
 	
 	  public static JSONObject sendOutputFiles(HttpServletRequest request,HttpServletResponse response, JSONArray results,String password,String username,String FTPusername){
 		  log.info("=======SendDataToServer BEGIN===================");
+		  System.out.println("=======SendDataToServer BEGIN===================");
 		  boolean finalFlag = false;
 		  boolean transferSuccess = false;
 		  boolean insertSuccess= false;
@@ -80,20 +81,23 @@ public class SendDataToServer  {
 		  	
 		  
 		  String userID=getUserID(userName);
-		 //boolean insertSuccess= insertDataToDatabase( results,userID);
 		 JSONObject chargeJobj = generateChargeFileContent(results);
 		 String chargeFileContent =(String) chargeJobj.get("chargeBuffer");
 		 String cCount= (String)chargeJobj.get("chargeRecordCount");
 		 int chargeRecordCount = Integer.parseInt(cCount);
 		 log.info("$$$$$  chargeFileContent: "+chargeFileContent.length());
 		 log.info("$$$$$  chargeRecordCount: "+chargeRecordCount);
+		
 		 String fullname = getFullname(userName);
 		  log.info("Fullname is:"+fullname);
+
 		  String emailcontent =getEmailContent(userName,chargeRecordCount);
 		  
 		  // try to send the 3 output files to server
 		  
+
 		  transferSuccess = sendReportFilesToServer(results,password,FTPusername,chargeFileContent); //run transfer
+
 		  log.info("$$$$ transferSuccess: "+transferSuccess);
 		
 		  
@@ -102,10 +106,11 @@ public class SendDataToServer  {
 			 //insert into database
 			 insertSuccess= insertDataToDatabase( results,userID);
 			 log.info("$$$$ insertSuccess: "+insertSuccess);
-			//success = sendReportFilesToServer(results,password,FTPusername,chargeFileContent); //run transfer
+			
 			 if (!insertSuccess)
 			 {
-				 log.info("$$$$ insertion failed so going to remove files:"); 
+				 log.info("$$$$ insertion failed and files are removed:"); 
+				 System.out.println("$$$$ insertion failed and files are removed:");
 				 //remove files from FTP server
 				 removeObj =removeFiles(username,password);
 				 String strRemoveSuccess =(String) removeObj.get("removeFlag");
@@ -1189,395 +1194,372 @@ public class SendDataToServer  {
 	   //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	   public static boolean insertDataToDatabase(JSONArray pending,String userID)
 	   {
-		   Connection conn = null;
-			Statement stmt = null;
-			ResultSet rs = null;
-			String userid = null;
-			
-			String itemNum = null;
-			 int maxTransID = 0;
-			 int chargeNO = 0;
-			 String barcode = null;
-			 
-			 
-			 boolean flag = true;
-			try {
-				conn = ConnectionManager.getConnection("billing");
-				stmt = conn.createStatement();
+			  Connection conn = null;
+				Statement stmt = null;
+				ResultSet rs = null;
+				String userid = null;
 				
-			}  catch (SQLException e) {
-				// TODO Auto-generated catch block
-				flag = false;
-				log.error("SQLException in creating the connection", e);
-			 } catch (NamingException e) {
-				log.error("JNDI Lookup failed for DB2 connection", e);
-			}
-		  
-		   for(int i = 0; i < pending.size(); i++){
-				JSONObject row = (JSONObject)pending.get(i);
-				String  invNumber =((String)row.get("invoiceNo")).trim();
-				String pid =((String)row.get("pid")).trim();
-				String  invoiceDate =((String)row.get("date")).trim();
-				String  chargeLoc =((String)row.get("loc")).trim();
-				String  chargeTypee =((String)row.get("chargeType")).trim();
-				String  chargeFee =((String)row.get("amount1")).trim();
-				String  processingFee =((String)row.get("amount2")).trim();
-				String  billingFees =((String)row.get("amount3")).trim();
-				String  patronNumber =((String)row.get("patronRecordNo")).trim();
-				String  barcodeTemp =((String)row.get("itemBarcode")).trim();
-				String title =((String)row.get("title")).trim();
-				String callNo =((String)row.get("callNo")).trim();
-				String pName =((String)row.get("name")).trim();
-				String aff =((String)row.get("patronAffliation")).trim();
-				String pType =((String)row.get("patronType")).trim();
-				
-				
-				log.info("invNumber: "+invNumber);
-				log.info("invoiceDate "+invoiceDate);
-				log.info("chargeLoc: "+chargeLoc);
-				log.info("chargeTypee: "+chargeTypee);
-				log.info("processingFee: "+processingFee);
-				log.info("billingFees: "+billingFees);
-				log.info("patronNumber: "+patronNumber);
-				log.info("barcodeTemp: "+barcodeTemp);
-				log.info("title: "+title);
-				log.info("callNo: "+callNo);
-				log.info("name: "+pName);
-				log.info("aff: "+aff);
-				log.info("pType: "+pType);
-				
-				 //===================================
-				 double chargeTotal = Double.parseDouble(chargeFee.substring(1));	
-				 log.info("chargeTotal"+chargeTotal);
-				 double finalAmtCharge = 0;
-				 /*
-				 if(chargeTotal >0)
-		           {
-		         String strAmt = ""+chargeTotal;
-		         int index = strAmt.indexOf(".");
-		         String newStr = strAmt.substring(0,index);
-		         log.info("newStr"+newStr);
-		         String newStr2 = newStr.substring(0,newStr.length()-2)+"."+newStr.substring(newStr.length()-2);
-		         log.info("newStr2"+newStr2);
-		         finalAmtCharge = Double.parseDouble(newStr2);
-		        
-					  finalAmtCharge =  chargeTotal;
-		           }
-				  else
-				  {	  finalAmtCharge =  chargeTotal;}
-				  */
-				  finalAmtCharge =  chargeTotal;
-				  log.info("finalAmtCharge"+finalAmtCharge);
-				  //===================================
-				  double finalAmtprocessingFee = 0;
-				 double processingFeeTotal = Double.parseDouble(processingFee.substring(1));	
-				 log.info("processingFeeTotal"+processingFeeTotal);
-				/* if(processingFeeTotal >0)
-		           {
-		         String strAmt1 = ""+processingFeeTotal;
-		         int index1 = strAmt1.indexOf(".");
-		         String newStr1 = strAmt1.substring(0,index1);
-		         log.info("newStr1"+newStr1);
-		         String newStr3 = newStr1.substring(0,newStr1.length()-2)+"."+newStr1.substring(newStr1.length()-2);
-		         log.info("newStr3"+newStr3);
-		         finalAmtprocessingFee = Double.parseDouble(newStr3);
-		         //log.info("finalAmtprocessingFee"+finalAmtprocessingFee);
-		           }
-				
-				 else {	  finalAmtprocessingFee =  processingFeeTotal;}
-				 */
-				 finalAmtprocessingFee =  processingFeeTotal;
-				 log.info("finalAmtprocessingFee"+finalAmtprocessingFee);
-				  //========================================
+				String itemNum = null;
+				int maxTransID = 0;
+				int chargeNO = 0;
+				String barcode = null;
 				 
-				  double finalAmtBillingFees = 0;
-					 double billingFeesTotal = Double.parseDouble(billingFees.substring(1));	
-					 log.info("billingFeesTotal"+billingFeesTotal);
-					/*
-					  if(billingFeesTotal >0)
-			           {
-			         String strAmt4 = ""+billingFeesTotal;
-			         int index1 = strAmt4.indexOf(".");
-			         String newStr4 = strAmt4.substring(0,index1);
-			         log.info("newStr4"+newStr4);
-			         String newStr5 = newStr4.substring(0,newStr4.length()-2)+"."+newStr4.substring(newStr4.length()-2);
-			         log.info("newStr5"+newStr5);
-			         finalAmtBillingFees = Double.parseDouble(newStr5);
-			         //log.info("finalAmtBillingFees"+finalAmtprocessingFee);
-			           }
+				 
+				boolean flag = true;
+				try {
+					conn = ConnectionManager.getConnection("billing");
+					stmt = conn.createStatement();
 					
-					 else {	  finalAmtBillingFees =  billingFeesTotal;}
-					 */
-					 finalAmtBillingFees =  billingFeesTotal;
-					 log.info("finalAmtBillingFees"+finalAmtBillingFees);
+				}  catch (SQLException e) {
+					// TODO Auto-generated catch block
+					flag = false;
+					log.error("SQLException in creating the connection", e);
+					System.out.println("SQLException in creating the connection" + e);
+				 } catch (NamingException e) {
+					log.error("JNDI Lookup failed for DB2 connection", e);
+				}
+			  
+			  for(int i = 0; i < pending.size(); i++){
+					JSONObject row = (JSONObject)pending.get(i);
+					String  invNumber =((String)row.get("invoiceNo")).trim();
+					String pid =((String)row.get("pid")).trim();
+					String  invoiceDate =((String)row.get("date")).trim();
+					String  chargeLoc =((String)row.get("loc")).trim();
+					String  chargeTypee =((String)row.get("chargeType")).trim();
+					String  chargeFee =((String)row.get("amount1")).trim();
+					String  processingFee =((String)row.get("amount2")).trim();
+					String  billingFees =((String)row.get("amount3")).trim();
+					String  patronNumber =((String)row.get("patronRecordNo")).trim();
+					String  barcodeTemp =((String)row.get("itemBarcode")).trim();
+					String title =((String)row.get("title")).trim();
+					String callNo =((String)row.get("callNo")).trim();
+					String pName =((String)row.get("name")).trim();
+					String aff =((String)row.get("patronAffliation")).trim();
+					String pType =((String)row.get("patronType")).trim();
+					
+					
+					log.info("invNumber: "+invNumber);
+					log.info("invoiceDate "+invoiceDate);
+					log.info("chargeLoc: "+chargeLoc);
+					log.info("chargeTypee: "+chargeTypee);
+					log.info("processingFee: "+processingFee);
+					log.info("billingFees: "+billingFees);
+					log.info("patronNumber: "+patronNumber);
+					log.info("barcodeTemp: "+barcodeTemp);
+					log.info("title: "+title);
+					log.info("callNo: "+callNo);
+					log.info("name: "+pName);
+					log.info("aff: "+aff);
+					log.info("pType: "+pType);
+					
+					 //===================================
+					 double chargeTotal = Double.parseDouble(chargeFee.substring(1));	
+					 log.info("chargeTotal"+chargeTotal);
+					 double finalAmtCharge = 0;
+					
+					 finalAmtCharge =  chargeTotal;
+					 log.info("finalAmtCharge"+finalAmtCharge);
+					  //===================================
+					 double finalAmtprocessingFee = 0;
+					 double processingFeeTotal = Double.parseDouble(processingFee.substring(1));	
+					 log.info("processingFeeTotal"+processingFeeTotal);
+					
+					 finalAmtprocessingFee =  processingFeeTotal;
+					 log.info("finalAmtprocessingFee"+finalAmtprocessingFee);
 					  //========================================
-				 
-				
-				//String  invoiceDate =((String)row.get("date")).trim();
-					// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-				 if (barcodeTemp.length() > 2)
-				 {
-					 int t= barcodeTemp.indexOf("b");
-					 if(t == 0)
-					 {
-						 barcode = barcodeTemp.substring(1); 
-							
-					 }
-					 else
-					 {
-						 barcode = barcodeTemp; 
-					 }
-					// barcode = barcodeTemp.substring(1); 
-				
-				
-				    log.info("barcode: "+barcode);
-				    try {
-					  rs = stmt.executeQuery(" SELECT ITEMNO FROM ITEMS WHERE BARCODE="+ "'"+barcode+"'");
 					 
-					  while (rs.next()) {
-						itemNum = rs.getString(1);
-					     log.info("ITEMNO: "+itemNum);
-					   }
+					  double finalAmtBillingFees = 0;
+						double billingFeesTotal = Double.parseDouble(billingFees.substring(1));	
+						log.info("billingFeesTotal"+billingFeesTotal);
+						
+						finalAmtBillingFees =  billingFeesTotal;
+						log.info("finalAmtBillingFees"+finalAmtBillingFees);
+						  //========================================
+					 
 					
-					
-				    } catch (NumberFormatException e) {
-					  // TODO Auto-generated catch block
-					  flag = false;
-					  log.error("NumberFormatException", e);
-				    } catch (SQLException e) {
-					  // TODO Auto-generated catch block
-					  flag = false;
-					  log.error("SQLException", e);
-				    } 
-				
-				 }//end  if (barcodeTemp.length() > 2)
-				 else{
-					 //if no barcode insert a record to ITEMS table and then use that new itemno
-					 try{
-						  rs = stmt.executeQuery("SELECT MAX(itemNo) FROM ITEMS");
-							long maxItemNo =0;
-							while (rs.next()) {
-								maxItemNo = rs.getLong(1);
-							 System.out.println("itemNo:"+maxItemNo);
-							// System.out.println("byeee");
+					//String  invoiceDate =((String)row.get("date")).trim();
+						// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+					  if (barcodeTemp.length() > 2)
+					  {
+							int t= barcodeTemp.indexOf("b");
+							if(t == 0)
+							{
+								barcode = barcodeTemp.substring(1); 
+									
 							}
+							else
+							{
+								 barcode = barcodeTemp; 
+							}
+					
+					    log.info("barcode: "+barcode);
+					    try {
+						  rs = stmt.executeQuery(" SELECT ITEMNO FROM ITEMS WHERE BARCODE="+ "'"+barcode+"'");
+						 
+							  while (rs.next()) 
+							  {
+								   itemNum = rs.getString(1);
+							     log.info("ITEMNO: "+itemNum);
+							   }
+						
+					    } catch (NumberFormatException e) {
+						  // TODO Auto-generated catch block
+						  flag = false;
+						  log.error("NumberFormatException", e);
+					    } catch (SQLException e) {
+						  // TODO Auto-generated catch block
+						  flag = false;
+						  log.error("SQLException", e);
+					    } 
+					
+					  }//end  if (barcodeTemp.length() > 2)
+					  else{
+						 //if no barcode insert a record to ITEMS table and then use that new itemno
+						  try{
+							  rs = stmt.executeQuery("SELECT MAX(itemNo) FROM ITEMS");
+								long maxItemNo =0;
+								while (rs.next()) {
+									maxItemNo = rs.getLong(1);
+								
+								}
+								
+								 PreparedStatement pstmt = conn.prepareStatement(
+										    "INSERT INTO ITEMS ( ITEMNO,BARCODE, TITLE,CALLNUMBER ) " +
+										    " values (?, ?, ?, ?)");
+		                        
+								 
+								    pstmt.setLong( 1, (maxItemNo+1) );
+								    pstmt.setString( 2,barcodeTemp ); 
+								    pstmt.setString( 3, title ); 
+								    pstmt.setString( 4, callNo);
+								    log.info("+++++++ INSERTING INTO ITEMS +++++++++++++");
+								    log.info("$$$$$ (maxItemNo+1): "+(maxItemNo+1));
+								    log.info("$$$$$ barcodeTemp: "+(barcodeTemp+1));
+								    log.info("$$$$$ title: "+title);
+								    log.info("$$$$$ callNo: "+callNo);
+								    
+								    pstmt.execute();
+								    
+								    conn.commit();
+								  
+								    long newItemlong = maxItemNo+1;
+								    itemNum = ""+newItemlong;
+								   log.info("$$$$$ new iTem no was: "+newItemlong);	
+								   log.info("$$$$$$$$   Inserted the record to ITEMS table...");	
+								   
+						 }
+						 catch (NumberFormatException e) {
+								// TODO Auto-generated catch block
+								flag = false;
+								log.error("NumberFormatException", e);
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								flag = false;
+								log.error("SQLException", e);
+							} 
 							
-							 PreparedStatement pstmt = conn.prepareStatement(
-									    "INSERT INTO ITEMS ( ITEMNO,BARCODE, TITLE,CALLNUMBER ) " +
-									    " values (?, ?, ?, ?)");
-	                        
-							 
-							    pstmt.setLong( 1, (maxItemNo+1) );
-							    pstmt.setString( 2,barcodeTemp ); 
-							    pstmt.setString( 3, title ); 
-							    pstmt.setString( 4, callNo);
-							    log.info("+++++++ INSERTING INTO ITEMS +++++++++++++");
-							    log.info("$$$$$ (maxItemNo+1): "+(maxItemNo+1));
-							    log.info("$$$$$ barcodeTemp: "+(barcodeTemp+1));
-							    log.info("$$$$$ title: "+title);
-							    log.info("$$$$$ callNo: "+callNo);
-							    
-							    pstmt.execute();
-							    
-							    conn.commit();
-							  
-							    long newItemlong = maxItemNo+1;
-							    itemNum = ""+newItemlong;
-							   log.info("$$$$$ new iTem no was: "+newItemlong);	
-							   log.info("$$$$$$$$   Inserted the record to ITEMS table...");	
-					 }
-					 catch (NumberFormatException e) {
+					 }//end of else part for if(barcode
+					 
+					 
+					//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+					 try
+					 {
+					    rs = stmt.executeQuery(" SELECT MAX(TRANSACTIONNO) FROM TRANSACTIONS");
+					
+					    while (rs.next()) {
+						   maxTransID = rs.getInt(1);
+						   log.info("max item id: "+maxTransID);
+					    }
+					
+					
+					    rs = stmt.executeQuery("SELECT CHARGETYPE FROM CHARGETYPES WHERE upper(DESCRIPTION) LIKE"+ "'" + chargeTypee + "%'");
+						
+						  while (rs.next()) {
+							chargeNO = rs.getInt(1);
+							log.info("chargeNO: "+chargeNO);
+						  }
+					
+					  } catch (NumberFormatException e) {
 							// TODO Auto-generated catch block
 							flag = false;
 							log.error("NumberFormatException", e);
-						} catch (SQLException e) {
+					  } catch (SQLException e) {
 							// TODO Auto-generated catch block
 							flag = false;
 							log.error("SQLException", e);
-						} 
+					  } 
+					//======= 01/28 insert new patrons====================
+					try
+					{
+						String patronNoN = patronNumber.substring(1);
+					
+					  rs = stmt.executeQuery(" SELECT count(*)FROM PATRONS WHERE PATRONNO ="+"'" +patronNoN+"'");
+				    int count1 = 0;
+						while (rs.next()) {
+							 count1 = rs.getInt(1);				
+							 log.info("count1="+count1);
+						}
+						int maxPatronId =0;
+						if(count1 == 0)
+						{
+							// get maximum patron id and insert the patron to Patron table
+							rs = stmt.executeQuery(" SELECT MAX(PATRONID) FROM PATRONS");
+							
+							while (rs.next()) {
+								maxPatronId = rs.getInt(1);
+								 log.info("maxPatronId: "+maxPatronId);
+							}
 						
-				 }//end of else part for if(barcode
-				 
-				 
-				//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-				try{
-				rs = stmt.executeQuery(" SELECT MAX(TRANSACTIONNO) FROM TRANSACTIONS");
-				
-				while (rs.next()) {
-					   maxTransID = rs.getInt(1);
-					   log.info("max item id: "+maxTransID);
-				}
-				
-				
-				  rs = stmt.executeQuery("SELECT CHARGETYPE FROM CHARGETYPES WHERE upper(DESCRIPTION) LIKE"+ "'" + chargeTypee + "%'");
-					
-					while (rs.next()) {
-						chargeNO = rs.getInt(1);
-						log.info("chargeNO: "+chargeNO);
-					}
-				
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					flag = false;
-					log.error("NumberFormatException", e);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					flag = false;
-					log.error("SQLException", e);
-				} 
-				//======= 01/28 insert new patrons====================
-				try{
-					String patronNoN = patronNumber.substring(1);
-				
-				rs = stmt.executeQuery(" SELECT count(*)FROM PATRONS WHERE PATRONNO ="+"'" +patronNoN+"'");
-			    int count1 = 0;
-				while (rs.next()) {
-					 count1 = rs.getInt(1);				
-					 log.info("count1="+count1);
-				}
-				int maxPatronId =0;
-				if(count1 == 0)
-				{
-					// get maximum patron id and insert the patron to Patron table
-					rs = stmt.executeQuery(" SELECT MAX(PATRONID) FROM PATRONS");
-					
-					while (rs.next()) {
-						maxPatronId = rs.getInt(1);
-						 log.info("maxPatronId: "+maxPatronId);
-					}
-					
-					//get patron no substrin 1
-					PreparedStatement pstmt = conn.prepareStatement(
-						    "INSERT INTO PATRONS ( PATRONNO,PID,PATRONNAME,PATRONTYPE,AFFILIATION,PATRONID,NOTES) " +
-						    " values (?, ?, ?, ?, ? ,?,?)");
-					
-					pstmt.setString( 1,patronNumber.substring(1));
-				    pstmt.setString( 2,pid ); 
-				    pstmt.setString( 3, pName ); 
-				    pstmt.setInt( 4, Integer.parseInt(pType));
-				    pstmt.setInt( 5, Integer.parseInt(aff));
-				    pstmt.setInt( 6, (maxPatronId+1));
-				    pstmt.setString( 7, "" ); 
-				    log.info("+++++++ INSERTING INTO PATRONS +++++++++++++");
-				    log.info("$$$$$ patronNumber: "+patronNumber.substring(1));
-				    log.info("$$$$$ pid: "+pid);
-				    log.info("$$$$$ pName: "+pName);
-				    log.info("$$$$$ pType: "+ Integer.parseInt(pType));
-				    log.info("$$$$$ Aff: "+Integer.parseInt(aff));
-				    log.info("$$$$$ (maxPatronId+1): "+(maxPatronId+1));
-				    
-				    pstmt.execute();					    
-				    log.info("executed  good 1...");
-				}
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					 log.info("SQLException  when inserting patrons...");
-					 log.error("SQLException", e);
-					flag = false;
-				}
-				//==========insert part=================
-				try {
-					String patronNumberNew = patronNumber.substring(1);
-					  PreparedStatement pstmt = conn.prepareStatement(
-							    "INSERT INTO TRANSACTIONS ( TRANSACTIONNO,INVOICENO, INVOICEDATE,CHARGELOCATION,CHARGETYPE,CHARGE,PROCESSINGFEE,BILLINGFEE,PATRONNO,ITEMNO,ADDEDDATE,USERID ) " +
-							    " values (?, ?, ?, ?, ? ,?,?,?,?,?,?,?)");
-					 
-					  String strInvDate ="20"+invoiceDate.substring(0,2)+"-"+invoiceDate.substring(2,4)+"-"+invoiceDate.substring(4);
-					  log.info("strInvDate"+strInvDate);
-					  java.sql.Date jsqlD = java.sql.Date.valueOf( strInvDate );
-					  DateFormat shortDf = DateFormat.getDateInstance(DateFormat.SHORT);
-					  String todayStr = shortDf.format(new Date());
-					  String [] temp = todayStr.split("/");
-					  String newArray = "20"+temp[2]+"-"+temp[0]+"-"+temp[1];
-					  System.out.println("newarray:"+newArray);
-					  java.sql.Date when = java.sql.Date.valueOf( newArray);
-					  log.info("when:"+when);
-					  if (itemNum == null)
-					  {
-						  itemNum = "000000";
-					  }
-					    pstmt.setLong( 1, (maxTransID+1) );
-					    pstmt.setString( 2,invNumber ); 
-					    pstmt.setDate( 3, jsqlD ); 
-					    pstmt.setString( 4, chargeLoc);
-					    pstmt.setInt( 5, chargeNO);
-					    pstmt.setDouble( 6, finalAmtCharge);
-					    pstmt.setDouble( 7, finalAmtprocessingFee ); 
-					    pstmt.setDouble(8, finalAmtBillingFees ); 
-					    pstmt.setString(9, patronNumberNew ); 
-					    pstmt.setString(10, itemNum ); 
-					  	pstmt.setDate( 11,when ); 
-					    pstmt.setString( 12, userID );
-					   					    
-					   // conn.commit();
-					    log.info("+++++++ INSERTING INTO TRANSACTIONS +++++++++++++");
-					    log.info("$$$$$  (maxTransID+1) : "+ (maxTransID+1) );
-					    log.info("$$$$$ invNumber: "+invNumber);
-					    log.info("$$$$$ jsqlD: "+jsqlD);
-					    log.info("$$$$$ chargeLoc: "+chargeLoc);
-					    log.info("$$$$$ finalAmtCharge: "+finalAmtCharge);
-					    log.info("$$$$$ finalAmtprocessingFee: "+finalAmtprocessingFee);
-					    log.info("$$$$$ finalAmtBillingFees: "+finalAmtBillingFees);
-					    log.info("$$$$$ patronNumberNew: "+patronNumberNew);
-					    log.info("$$$$$ itemNum: "+itemNum);
-					    log.info("$$$$$ when: "+when);
-					    log.info("$$$$$ userid: "+userID);
+						  //get patron no substrin 1
+						  PreparedStatement pstmt = conn.prepareStatement(
+							    "INSERT INTO PATRONS ( PATRONNO,PID,PATRONNAME,PATRONTYPE,AFFILIATION,PATRONID,NOTES) " +
+							    " values (?, ?, ?, ?, ? ,?,?)");
+						
+						  pstmt.setString( 1,patronNumber.substring(1));
+					    pstmt.setString( 2,pid ); 
+					    pstmt.setString( 3, pName ); 
+					    pstmt.setInt( 4, Integer.parseInt(pType));
+					    pstmt.setInt( 5, Integer.parseInt(aff));
+					    pstmt.setInt( 6, (maxPatronId+1));
+					    pstmt.setString( 7, "" ); 
+					    log.info("+++++++ INSERTING INTO PATRONS +++++++++++++");
+					    log.info("$$$$$ patronNumber: "+patronNumber.substring(1));
+					    log.info("$$$$$ pid: "+pid);
+					    log.info("$$$$$ pName: "+pName);
+					    log.info("$$$$$ pType: "+ Integer.parseInt(pType));
+					    log.info("$$$$$ Aff: "+Integer.parseInt(aff));
+					    log.info("$$$$$ (maxPatronId+1): "+(maxPatronId+1));
 					    
-					    pstmt.execute();
-					    log.info("executed  good...");
-					  
-					  
-					  
-					  
-				
-		   } catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				flag = false;
-				log.error("NumberFormatException", e);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				 log.info("SQLException  333333...");
-				 log.error("SQLException", e);
-				flag = false;
-				try{ if (conn != null) {
-				        conn.rollback();
-				        
-				      }
-				
-				}
-				 catch (SQLException eg) { log.info("Connection rollback MAIN...");
-				 log.error("SQLException", eg);
-				 }
-			} 
-				
-				
-				
-				
-		   }//end of for
-		   
-		  try{
-			   rs.close();
-			   stmt.close();
-			   conn.commit();
-			   conn.close();
+					    pstmt.execute();					    
+					    log.info("executed  good 1...");
+					    
+					  }
+					 } catch (SQLException e) {
+						// TODO Auto-generated catch block
+						 log.info("SQLException  when inserting patrons...");
+						 
+						 log.error("SQLException", e);
+						flag = false;
+				 	}
+					//==========insert part=================
+					try {
+
+						  String patronNumberNew = patronNumber.substring(1);
+							PreparedStatement pstmt = conn.prepareStatement(
+								    "INSERT INTO TRANSACTIONS ( TRANSACTIONNO,INVOICENO, INVOICEDATE,CHARGELOCATION,CHARGETYPE,CHARGE,PROCESSINGFEE,BILLINGFEE,PATRONNO,ITEMNO,ADDEDDATE,USERID ) " +
+								    " values (?, ?, ?, ?, ? ,?,?,?,?,?,?,?)");
+						 
+						  String strInvDate ="20"+invoiceDate.substring(0,2)+"-"+invoiceDate.substring(2,4)+"-"+invoiceDate.substring(4);
+						  log.info("strInvDate"+strInvDate);
+						  java.sql.Date jsqlD = java.sql.Date.valueOf( strInvDate );
+						  DateFormat shortDf = DateFormat.getDateInstance(DateFormat.SHORT);
+						  String todayStr = shortDf.format(new Date());
+						  String [] temp = todayStr.split("/");
+						  String newArray = "20"+temp[2]+"-"+temp[0]+"-"+temp[1];						  
+						  java.sql.Date when = java.sql.Date.valueOf( newArray);
+						  log.info("when:"+when);
+						  if (itemNum == null)
+						  {
+							  itemNum = "000000";
+						  }
+
+						  
+
+						    pstmt.setLong( 1, (maxTransID+1) );
+						    pstmt.setString( 2,invNumber ); 
+						    pstmt.setDate( 3, jsqlD ); 
+						    pstmt.setString( 4, chargeLoc);
+						    pstmt.setInt( 5, chargeNO);
+						    pstmt.setDouble( 6, finalAmtCharge);
+						    pstmt.setDouble( 7, finalAmtprocessingFee ); 
+						    pstmt.setDouble(8, finalAmtBillingFees ); 
+						    pstmt.setString(9, patronNumberNew ); 
+						    pstmt.setString(10, itemNum);  
+						    pstmt.setDate( 11,when ); 
+						    pstmt.setString( 12, userID);
+						   					    
+						   // conn.commit();
+						    log.info("+++++++ INSERTING INTO TRANSACTIONS +++++++++++++");
+						    log.info("$$$$$  (maxTransID+1) : "+ (maxTransID+1) );
+						    log.info("$$$$$ invNumber: "+invNumber);
+						    log.info("$$$$$ jsqlD: "+jsqlD);
+						    log.info("$$$$$ chargeLoc: "+chargeLoc);
+						    log.info("$$$$$ finalAmtCharge: "+finalAmtCharge);
+						    log.info("$$$$$ finalAmtprocessingFee: "+finalAmtprocessingFee);
+						    log.info("$$$$$ finalAmtBillingFees: "+finalAmtBillingFees);
+						    log.info("$$$$$ patronNumberNew: "+patronNumberNew);
+						    log.info("$$$$$ itemNum: "+itemNum);
+						    log.info("$$$$$ when: "+when);
+						    log.info("$$$$$ userid: "+userID);
+
+						    System.out.println("+++++++ INSERTING INTO TRANSACTIONS +++++++++++++");
+						    System.out.println("$$$$$1  (maxTransID+1): "+ (maxTransID+1) );
+						    System.out.println("$$$$$2 invNumber: "+invNumber);
+						    System.out.println("$$$$$3 jsqlD: "+jsqlD);
+						    System.out.println("$$$$$4 chargeLoc: "+chargeLoc);
+						    System.out.println("$$$$$5 chargeNO: "+chargeNO);
+						    System.out.println("$$$$$6 finalAmtCharge: "+finalAmtCharge);
+						    System.out.println("$$$$$7 finalAmtprocessingFee: "+finalAmtprocessingFee);
+						    System.out.println("$$$$$8 finalAmtBillingFees: "+finalAmtBillingFees);
+						    System.out.println("$$$$$9 patronNumberNew: "+patronNumberNew);
+						    System.out.println("$$$$$10 itemNum: "+itemNum);
+						    System.out.println("$$$$$11 when: "+when);
+						    System.out.println("$$$$$12 userid: "+userID);
+						    
+						   pstmt.execute();
+
+						  log.info("executed  good...");
+						  
+					
+				   } catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						flag = false;
+						log.error("NumberFormatException", e);
+						System.out.println("NumberFormatException"+ e);
+					 } catch (SQLException e) {
+							// TODO Auto-generated catch block
+							 log.info("SQLException  333333...");
+							 log.error("SQLException", e);
+							 
+							 System.out.println("SQLException  555555..." + e);
+
+							 flag = false;
+							 try{ if (conn != null) {
+							        conn.rollback();
+							        
+							      }
+							 }
+						   catch (SQLException eg) { 
+						   	log.info("Connection rollback MAIN...");
+						    log.error("SQLException", eg);
+						   }
+				   } 
+			   }//end of for
 			   
-		   } catch (SQLException e) {
-				// TODO Auto-generated catch block
-				flag = false;
-				try{ if (conn != null) {
-					    rs.close();
-					    stmt.close();
-				        conn.rollback();
-				        conn.close();
-				      }
-				
-				}
-				 catch (SQLException eg) { System.out.println("Connection rollback MAIN...");
-				 log.error("SQLException", eg);
-				 }
-			} 
-	   log.info("flag from insert:"+flag);
-		   return flag;
+			  try{
+				   rs.close();
+				   stmt.close();
+				   //conn.commit();
+				   conn.close();
+				   
+			   } catch (SQLException e) {
+					// TODO Auto-generated catch block
+						flag = false;
+						try{ if (conn != null) 
+							   {
+							    rs.close();
+							    stmt.close();
+						       conn.rollback();
+						       conn.close();
+						      }
+						 }
+						 catch (SQLException eg) { 
+						 	 System.out.println("Connection rollback MAIN...");
+						   log.error("SQLException", eg);
+						 }
+			  	} 
+		     log.info("flag from insert:"+flag);
+			   return flag;
 	   }
 	   
 	   
