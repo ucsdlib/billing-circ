@@ -432,9 +432,9 @@ $(function(){
 			   	Text+= '}</script>';
 				Text+= '</head> <body>';
 				Text += ' <table><tr>Please enter FTP username and password</tr><tr><td>Username:</td> ';
-				Text += '<td><input type="text" id="txtUsername" value="libzzz" READONLY></td></tr>';
+				Text += '<td><input type="text" id="txtUsername" value="libzzz"></td></tr>';
 				Text += ' <tr><td>Password:</td> ';
-				Text += ' <td><input type="password" id="txtpassword" value="ron1946" READONLY></td></tr>';
+				Text += ' <td><input type="password" id="txtpassword" value="ron1946"></td></tr>';
 				Text += '<tr><td><input type="submit" value= "Ok"  onClick="CallParentWindowFunction()"></td>';
 				Text += '<td><input type="submit" value= "Cancel"  onClick="window.close()"></td></tr>';
 				Text+='</table></body></html>';
