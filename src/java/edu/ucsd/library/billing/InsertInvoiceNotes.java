@@ -117,8 +117,8 @@ public class InsertInvoiceNotes extends HttpServlet {
 			  
 			  
 			 PreparedStatement pstmt = conn.prepareStatement(
-					    "INSERT INTO INVOICENOTES ( NOTEID,INVOICENO, EXPLANATIONID,RESPONSEID,COMMUNICATIONID,DATEADDED,DATEUPDATED,USERID,ADDITIONALNOTES ) " +
-					    " values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					    "INSERT INTO INVOICENOTES ( NOTEID,INVOICENO, EXPLANATIONID,RESPONSEID,COMMUNICATIONID,DATEADDED,USERID,ADDITIONALNOTES ) " +
+					    " values (?, ?, ?, ?, ?, ?, ?, ?)");
 			 
 			    pstmt.setLong( 1, (maxNoteID+1) );
 			    pstmt.setString( 2,inv ); 
@@ -126,9 +126,8 @@ public class InsertInvoiceNotes extends HttpServlet {
 			    pstmt.setString( 4, strres);
 			    pstmt.setString(5, strcom ); 
 			    pstmt.setDate( 6, when);
-			    pstmt.setDate( 7, when ); 
-			    pstmt.setString( 8, strUserId);
-			    pstmt.setString( 9, strNote ); 
+			    pstmt.setString( 7, strUserId);
+			    pstmt.setString( 8, strNote ); 
 			    
 			    pstmt.execute();
 			    
