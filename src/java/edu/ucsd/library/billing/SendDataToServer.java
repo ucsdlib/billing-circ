@@ -55,7 +55,7 @@ import java.text.NumberFormat;
 //import javax.mail.*;
 
 public class SendDataToServer  {
-	private static Logger log = Logger.getLogger( SendDataToServer .class );
+	private static Logger log = Logger.getLogger( SendDataToServer.class );
 	
 	static String commonFileName = null;
 	  private String userEmail;
@@ -78,7 +78,6 @@ public class SendDataToServer  {
 		  	//if(results.size() == 0)
 		  	//	return false;
 		  	
-		  	
 		  
 		  String userID=getUserID(userName);
 		 JSONObject chargeJobj = generateChargeFileContent(results);
@@ -90,6 +89,7 @@ public class SendDataToServer  {
 		
 		 String fullname = getFullname(userName);
 		  log.info("Fullname is:"+fullname);
+		 System.out.println("userName is " + userName);
 
 		  String emailcontent =getEmailContent(userName,chargeRecordCount);
 		  
@@ -106,6 +106,7 @@ public class SendDataToServer  {
 			 //insert into database
 			 insertSuccess= insertDataToDatabase( results,userID);
 			 log.info("$$$$ insertSuccess: "+insertSuccess);
+			 System.out.println("$$$$ insertDataToDatabase:" + insertSuccess);
 			
 			 if (!insertSuccess)
 			 {
@@ -139,9 +140,11 @@ public class SendDataToServer  {
 			     String ACTemail="act-prodcontrol@ucsd.edu";			    
 			     String [] ACTstrArr={ACTemail};
 			     String contactemail1="hweng@ucsd.edu";
-			     String [] contactstrArr1={contactemail1};
 			     String contactemail2="gferguson@ucsd.edu";
+			     String contactemail3="lchodur@ucsd.edu";
+			     String [] contactstrArr1={contactemail1};
 			     String [] contactstrArr2={contactemail2};
+			     String [] contactstrArr3={contactemail3};
 			     String email=getEmail(userName);
 			     if(email == null){
 			    	 email= userName+"@ucsd.edu";
@@ -154,6 +157,7 @@ public class SendDataToServer  {
 		           Mail.sendMail(ACTemail,ACTstrArr , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");
 		           Mail.sendMail(contactemail1,contactstrArr1 , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");
 		           Mail.sendMail(contactemail2,contactstrArr2 , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");
+		           Mail.sendMail(contactemail3,contactstrArr3 , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");
 		           Mail.sendMail(email,strArr , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");  
 		          
 		       } catch (Exception e) {
@@ -1340,22 +1344,24 @@ public class SendDataToServer  {
 								    
 								    pstmt.execute();
 								    
-								    conn.commit();
 								  
 								    long newItemlong = maxItemNo+1;
 								    itemNum = ""+newItemlong;
 								   log.info("$$$$$ new iTem no was: "+newItemlong);	
 								   log.info("$$$$$$$$   Inserted the record to ITEMS table...");	
+								   System.out.println("$$$$$$$$   Inserted the record to ITEMS table...");
 								   
 						 }
 						 catch (NumberFormatException e) {
 								// TODO Auto-generated catch block
 								flag = false;
 								log.error("NumberFormatException", e);
+								System.out.println("INSERT INTO ITEMS NumberFormatException:" + e);
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								flag = false;
 								log.error("SQLException", e);
+								System.out.println("INSERT INTO ITEMS SQLException:" + e);
 							} 
 							
 					 }//end of else part for if(barcode
@@ -1368,9 +1374,9 @@ public class SendDataToServer  {
 					
 					    while (rs.next()) {
 						   maxTransID = rs.getInt(1);
-						   log.info("max item id: "+maxTransID);
+						   log.info("max TRANSACTIONNO: "+maxTransID);
 					    }
-					
+
 					
 					    rs = stmt.executeQuery("SELECT CHARGETYPE FROM CHARGETYPES WHERE upper(DESCRIPTION) LIKE"+ "'" + chargeTypee + "%'");
 						
@@ -1388,6 +1394,7 @@ public class SendDataToServer  {
 							flag = false;
 							log.error("SQLException", e);
 					  } 
+					  
 					//======= 01/28 insert new patrons====================
 					try
 					{
@@ -1432,16 +1439,19 @@ public class SendDataToServer  {
 					    
 					    pstmt.execute();					    
 					    log.info("executed  good 1...");
+					    System.out.println("INSERT INTO PATRONS executed  good...");
+
 					    
 					  }
 					 } catch (SQLException e) {
 						// TODO Auto-generated catch block
 						 log.info("SQLException  when inserting patrons...");
-						 
+						 System.out.println("INSERT INTO PATRONS SQLException..." + e);
 						 log.error("SQLException", e);
 						flag = false;
 				 	}
 					//==========insert part=================
+				if(flag) {
 					try {
 
 						  String patronNumberNew = patronNumber.substring(1);
@@ -1509,13 +1519,14 @@ public class SendDataToServer  {
 						   pstmt.execute();
 
 						  log.info("executed  good...");
+						  System.out.println("executed  good...");
 						  
 					
 				   } catch (NumberFormatException e) {
 						// TODO Auto-generated catch block
 						flag = false;
 						log.error("NumberFormatException", e);
-						System.out.println("NumberFormatException"+ e);
+						System.out.println("NumberFormatException" + e);
 					 } catch (SQLException e) {
 							// TODO Auto-generated catch block
 							 log.info("SQLException  333333...");
@@ -1534,6 +1545,7 @@ public class SendDataToServer  {
 						    log.error("SQLException", eg);
 						   }
 				   } 
+          }
 			   }//end of for
 			   
 			  try{
@@ -1559,6 +1571,7 @@ public class SendDataToServer  {
 						 }
 			  	} 
 		     log.info("flag from insert:"+flag);
+		     System.out.println("flag from insert:"+flag);
 			   return flag;
 	   }
 	   
@@ -1904,6 +1917,7 @@ public class SendDataToServer  {
 			Statement stmt = null;
 			ResultSet rs = null;
 			String userid = null;
+			int maxPendingID = 0;
 						 
 			 
 			try {
@@ -1917,12 +1931,30 @@ public class SendDataToServer  {
 			 } catch (NamingException e) {
 				log.error("JNDI Lookup failed for DB2 connection", e);
 			}
-		  
-		  
+
+			try
+			 {
+			    rs = stmt.executeQuery(" SELECT MAX(PENDINGID) FROM PENDING_HISTORY");
+			
+			    while (rs.next()) {
+				   maxPendingID = rs.getInt(1);
+				   log.info("max PendingID: "+maxPendingID);
+			    }
+			
+			  } catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					flag = false;
+					log.error("NumberFormatException", e);
+			  } catch (SQLException e) {
+					// TODO Auto-generated catch block
+					flag = false;
+					log.error("SQLException", e);
+			  } 
 		  
 		  
 		  for(int i = 0; i < rows.size(); i++){
 				JSONObject row = (JSONObject)rows.get(i);
+				maxPendingID = maxPendingID + 1;
 				
 				  try{
 				String invoiceNumber = ((String)row.get("invoiceNo")).trim();
@@ -1972,57 +2004,45 @@ public class SendDataToServer  {
 				// String patronNum = patronNo.substring(1);
 				 String pidd = null;
 				 String barCode = null;
-				/* if(pid.length() >2)
-				 {
-				  pidd = pid.substring(1);
-				 }
-				 else
-			 pidd =pid;
-				 	*/	
-			/*	 if(barcodee.length() >2)
-				 {
-					 barCode = barcodee.substring(1);
-				 }
-				 else
-					 barCode =barcodee;
-		*/
+				
 				 PreparedStatement pstmt1 = conn.prepareStatement(
-						    "INSERT INTO PENDING_HISTORY ( PENDINGID,TRANSACTIONDATE,INVOICENO, INVOICEDATE,CHARGELOCATION,CHARGETYPE,PATRONNO,PATRONTYPE,PID,NAME,ADDRESS,PCODE1,PCODE2,AFFILIATION,BARCODE,TITLE,CALLNO,CHARGEFEE,PROCESSINGFEE,BILLINGFEE ) " +
+						    "INSERT INTO PENDING_HISTORY ( PENDINGID,TRANSACTIONDATE,INVOICENO,CHARGELOCATION,CHARGETYPE,PATRONNO,PATRONTYPE,PID,NAME,ADDRESS,PCODE1,PCODE2,AFFILIATION,BARCODE,TITLE,CALLNO,CHARGEFEE,PROCESSINGFEE,BILLINGFEE, INVOICEDATE) " +
 						    " values (?, ?, ?, ?, ? ,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 		      
-				  pstmt1.setLong( 1, 0 );
-				
+				  pstmt1.setLong( 1, maxPendingID);
 				  pstmt1.setDate( 2,today);
 				  pstmt1.setString( 3, invoiceNumber ); 
-				 // pstmt1.setDate( 4, invoiceDate ); 
-				  pstmt1.setDate( 4, jsqlD1);
-				  pstmt1.setString( 5, chargeLoc);
-				  pstmt1.setString( 6, chargeTypee);
-				  pstmt1.setString( 7, patronNo);
-				  pstmt1.setString( 8, patronType ); 
-				  pstmt1.setString(9, pid ); 
-				  pstmt1.setString(10, pName ); 
-				  pstmt1.setString(11, address ); 				    
-				  pstmt1.setString(12, pcode1 ); 				 
-				  pstmt1.setString( 13,pcode2 ); 
-				  pstmt1.setString(14, aff );
-				  pstmt1.setString( 15, barcodee );
-				  pstmt1.setString( 16, bookTitle );
-				  pstmt1.setString( 17, bookCallNo );
-				  pstmt1.setString( 18, chargeFee );
-				  pstmt1.setString( 19, processingFee );
-				  pstmt1.setString( 20, billingFee );
+				  pstmt1.setString( 4, chargeLoc);
+				  pstmt1.setString( 5, chargeTypee);
+				  pstmt1.setString( 6, patronNo);
+				  pstmt1.setString( 7, patronType ); 
+				  pstmt1.setString(8, pid ); 
+				  pstmt1.setString(9, pName ); 
+				  pstmt1.setString(10, address ); 				    
+				  pstmt1.setString(11, pcode1 ); 				 
+				  pstmt1.setString( 12,pcode2 ); 
+				  pstmt1.setString(13, aff );
+				  pstmt1.setString( 14, barcodee );
+				  pstmt1.setString( 15, bookTitle );
+				  pstmt1.setString( 16, bookCallNo );
+				  pstmt1.setString( 17, chargeFee );
+				  pstmt1.setString( 18, processingFee );
+				  pstmt1.setString( 19, billingFee );
+				  pstmt1.setDate( 20, jsqlD1);
 				    
 				  pstmt1.execute();
+				  System.out.println("pending_history executed  good...");
 				  //conn.close();
 		  } catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				flag = false;
 				log.error("NumberFormatException", e);
+				System.out.println("NumberFormatException" + e);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				 log.info("SQLException  333333...");
 				 log.error("SQLException", e);
+				 System.out.println("SQLException" + e);
 				flag = false;
 				try{ if (conn != null) {
 				        conn.rollback();
