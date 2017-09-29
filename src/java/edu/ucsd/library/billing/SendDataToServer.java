@@ -1637,7 +1637,7 @@ public class SendDataToServer  {
 	  	  		  break;
 	  	case 'f': code = "C";
 	  	  		  break;
-	  	case 'g': code = "G";
+	  	case 'g': code = "C";
 	  			  break;
 	  	case 'i': code = "R";
 	  			  break;
