@@ -508,12 +508,12 @@ public class SendDataToServer  {
 						//twoLines = true;
 					
 					/* ==========Rule 2.2============================= */
-					String loc = ((String)row.get("loc")).trim(); 
+				  String loc = ((String)row.get("loc")).trim(); 
 					String fourthChar = " ";
 					log.info("BILLING UTILITY loc:"+loc);
 					System.out.println("BILLING UTILITY loc:"+loc);
 
-           if (loc == "alcd " || loc == "brask" || loc == "glcd ")
+           if (loc.equals("alcd") || loc.equals("brask")|| loc.equals("glcd"))
            {
              fourthChar = "T";
            }else
@@ -523,7 +523,7 @@ public class SendDataToServer  {
            }
            
            System.out.println("BILLING UTILITY fourthChar:"+ fourthChar);
-					//detailCode += fourthChar;
+				//detailCode += fourthChar;
 					
 					/* ==========Rule 2.3========================== */
 					

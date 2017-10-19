@@ -100,10 +100,21 @@ public static boolean processBillingData(HttpServletRequest request,HttpServletR
 					//twoLines = true;
 				
 				/* ==========Rule 2.2============================= */
-				String loc = ((String)row.get("loc")).trim(); 
-				log.info("BILLING UTILITY loc:"+loc);
-				char c = loc.charAt(0);
-				String fourthChar = getFourthCharacter(c);
+				  String loc = ((String)row.get("loc")).trim(); 
+					String fourthChar = " ";
+					log.info("BILLING UTILITY loc:"+loc);
+					System.out.println("BILLING UTILITY loc:"+loc);
+
+           if (loc.equals("alcd") || loc.equals("brask")|| loc.equals("glcd"))
+           {
+             fourthChar = "T";
+           }else
+           {
+           	 char c = loc.charAt(0);
+           	 fourthChar = getFourthCharacter(c);
+           }
+           
+           System.out.println("BILLING UTILITY fourthChar:"+ fourthChar);
 				//detailCode += fourthChar;
 				
 				/* ==========Rule 2.3========================== */
@@ -856,7 +867,7 @@ private static String getFourthCharacter(char c)
 	  		  break;
 	case 'f': code = "C";
 	  		  break;
-	case 'g': code = "G";
+	case 'g': code = "C";
 			  break;
 	case 'i': code = "R";
 			  break;
