@@ -68,7 +68,7 @@ public class SendDataToServer  {
 		  System.out.println("=======SendDataToServer BEGIN===================");
 		  boolean finalFlag = false;
 		  boolean transferSuccess = false;
-		  boolean insertSuccess= false;
+		  int insertSuccess= 0;
 		  boolean removeSuccess = false;
 		  boolean sessionSuccess= false;
 		  String errorMsg = " ";
@@ -95,9 +95,8 @@ public class SendDataToServer  {
 		  
 		  // try to send the 3 output files to server
 		  
-
+      
 		  transferSuccess = sendReportFilesToServer(results,password,FTPusername,chargeFileContent); //run transfer
-
 		  log.info("$$$$ transferSuccess: "+transferSuccess);
 		
 		  
@@ -108,35 +107,34 @@ public class SendDataToServer  {
 			 log.info("$$$$ insertSuccess: "+insertSuccess);
 			 System.out.println("$$$$ insertDataToDatabase:" + insertSuccess);
 			
-			 if (!insertSuccess)
+			 if (insertSuccess == 3)
 			 {
 				 log.info("$$$$ insertion failed and files are removed:"); 
 				 System.out.println("$$$$ insertion failed and files are removed:");
 				 //remove files from FTP server
-				 removeObj =removeFiles(username,password);
+				  removeObj =removeFiles(username,password);
 				 String strRemoveSuccess =(String) removeObj.get("removeFlag");
 				 removeSuccess = Boolean.parseBoolean(strRemoveSuccess);
 				 errorMsg += "Insertion to DB failed! \n";
-			 }
-			 
-				 
-			 if(transferSuccess && insertSuccess)
-			 { finalFlag = true;
-			   
 			 }
 			
 			 if(removeSuccess)
 			 {
 				 log.info("$$$$ removeSuccess: "+removeSuccess);
-				 finalFlag = false;
 				 String removeError =(String)removeObj.get("removeError");
 				 errorMsg +=  removeError; 
+				 finalFlag = false;
 			 }
 			 
-			 if(finalFlag)
-			 {
-				 sessionSuccess = insertSessionData(results);
-				 log.info("$$$$ sessionSuccess: "+sessionSuccess);			     
+			 if(insertSuccess == 1 || insertSuccess == 2 )
+			 { 
+			 	 finalFlag = true;
+			 	 if (insertSuccess == 2)
+			 	 {
+				   sessionSuccess = insertSessionData(results);
+				   log.info("$$$$ sessionSuccess: "+sessionSuccess);
+				   System.out.println("$$$$ sessionSuccess: "+sessionSuccess);
+				 }
 			     String ACTemail="act-prodcontrol@ucsd.edu";			    
 			     String [] ACTstrArr={ACTemail};
 			     String contactemail1="hweng@ucsd.edu";
@@ -151,8 +149,6 @@ public class SendDataToServer  {
 			     }			     
 			     String [] strArr = {email};
 			     
-			     
-			     
 		       try {
 		           Mail.sendMail(ACTemail,ACTstrArr , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");
 		           Mail.sendMail(contactemail1,contactstrArr1 , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");
@@ -164,7 +160,7 @@ public class SendDataToServer  {
 	                // TODO Auto-generated catch block
 	                e.printStackTrace();
 	           } 
-			 }
+			  }
 			 
 			 errorMsg +="Output File Transfer success!\n";
 		 }//end of if(transferSuccess)
@@ -1207,7 +1203,7 @@ public class SendDataToServer  {
 		   
 	   }
 	   //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-	   public static boolean insertDataToDatabase(JSONArray pending,String userID)
+	   public static int insertDataToDatabase(JSONArray pending,String userID)
 	   {
 			  Connection conn = null;
 				Statement stmt = null;
@@ -1221,6 +1217,8 @@ public class SendDataToServer  {
 				 
 				 
 				boolean flag = true;
+				boolean dupFlag = false;
+				int insertStatus = 0;
 				try {
 					conn = ConnectionManager.getConnection("billing");
 					stmt = conn.createStatement();
@@ -1354,7 +1352,6 @@ public class SendDataToServer  {
 								    log.info("$$$$$ callNo: "+callNo);
 								    
 								    pstmt.execute();
-								    
 								  
 								    long newItemlong = maxItemNo+1;
 								    itemNum = ""+newItemlong;
@@ -1463,8 +1460,23 @@ public class SendDataToServer  {
 				 	}
 					//==========insert part=================
 				if(flag) {
-					try {
-
+				 try
+				 {
+				 	System.out.println("INVOICENO = " + invNumber);
+					rs = stmt.executeQuery(" SELECT count(*)FROM TRANSACTIONS WHERE INVOICENO ="+"'" +invNumber+"'");
+				  int count1 = 0;
+					while (rs.next()) {
+							 count1 = rs.getInt(1);				
+							 System.out.println("count1="+count1);
+					}
+					if(count1 > 0) 
+					{
+            dupFlag = true;
+					}
+					else if(count1 == 0)
+					{
+					  try 
+					  {
 						  String patronNumberNew = patronNumber.substring(1);
 							PreparedStatement pstmt = conn.prepareStatement(
 								    "INSERT INTO TRANSACTIONS ( TRANSACTIONNO,INVOICENO, INVOICEDATE,CHARGELOCATION,CHARGETYPE,CHARGE,PROCESSINGFEE,BILLINGFEE,PATRONNO,ITEMNO,ADDEDDATE,USERID ) " +
@@ -1483,8 +1495,6 @@ public class SendDataToServer  {
 						  {
 							  itemNum = "000000";
 						  }
-
-						  
 
 						    pstmt.setLong( 1, (maxTransID+1) );
 						    pstmt.setString( 2,invNumber ); 
@@ -1555,9 +1565,17 @@ public class SendDataToServer  {
 						   	log.info("Connection rollback MAIN...");
 						    log.error("SQLException", eg);
 						   }
-				   } 
-          }
-			   }//end of for
+				    } 
+				  }//end if if(count1 == 0)
+				 }catch (SQLException e) {
+						 log.info("SQLException  when inserting transactions...");
+						 System.out.println("INSERT INTO transactions SQLException..." + e);
+						 log.error("SQLException", e);
+						flag = false;
+				 }
+        } //end if(flag)
+
+			  }//end of for
 			   
 			  try{
 				   rs.close();
@@ -1583,7 +1601,20 @@ public class SendDataToServer  {
 			  	} 
 		     log.info("flag from insert:"+flag);
 		     System.out.println("flag from insert:"+flag);
-			   return flag;
+		     if (dupFlag == true)
+         { 
+         	insertStatus = 1; //resubmit status that did not insert into transaction: not remove file, not insert into session table, send email
+          }
+		      else if(dupFlag == false && flag == true)
+		      {
+           insertStatus = 2; //insert into database success: not remove file, insert into session table and send email
+		      }else 
+		      {
+		      	insertStatus = 3; //insert into database fail, remove file, not insert into session table, not send email
+		      }
+		     	
+         System.out.println("insertStatus:"+insertStatus);
+			   return insertStatus;
 	   }
 	   
 	   
@@ -1795,7 +1826,7 @@ public class SendDataToServer  {
 	  		int p= str.indexOf(".");
 	  		String s2= str.substring(0,p)+ str.substring(p+1);
 	  		finalString = s2;
-	 	    //=========2/18======chandana====
+	 	    //=========2/18======
 	  		
 	 		 char lastChar = finalString.charAt(finalString.length()-1);
 		  	 log.info("if(amount<0): lastChar:"+lastChar);
