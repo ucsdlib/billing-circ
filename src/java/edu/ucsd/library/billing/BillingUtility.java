@@ -105,6 +105,7 @@ public static boolean processBillingData(HttpServletRequest request,HttpServletR
 					log.info("BILLING UTILITY loc:"+loc);
 					System.out.println("BILLING UTILITY loc:"+loc);
 
+
            if (loc.equals("alcd") || loc.equals("brask")|| loc.equals("glcd"))
            {
              fourthChar = "T";
