@@ -97,8 +97,12 @@ public class SendDataToServer  {
 		  
       
 		  transferSuccess = sendReportFilesToServer(results,password,FTPusername,chargeFileContent); //run transfer
+		  
 		  log.info("$$$$ transferSuccess: "+transferSuccess);
-		
+
+     // insertStatus = 1; resubmit status that did not insert into transaction: not remove file, not insert into session table, send email
+     // insertStatus = 2; insert into database success: not remove file, insert into session table and send email
+		 // insertStatus = 3; insert into database fail, remove file, not insert into session table, not send email
 		  
 		 if (transferSuccess)
 		 {
@@ -150,6 +154,7 @@ public class SendDataToServer  {
 			     String [] strArr = {email};
 			     
 		       try {
+		       	 
 		           Mail.sendMail(ACTemail,ACTstrArr , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");
 		           Mail.sendMail(contactemail1,contactstrArr1 , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");
 		           Mail.sendMail(contactemail2,contactstrArr2 , "Billing output file Transfer",emailcontent, "smtp.ucsd.edu");
@@ -1460,10 +1465,12 @@ public class SendDataToServer  {
 				 	}
 					//==========insert part=================
 				if(flag) {
+				 boolean tempFlag = false;
 				 try
 				 {
 				 	System.out.println("INVOICENO = " + invNumber);
-					rs = stmt.executeQuery(" SELECT count(*)FROM TRANSACTIONS WHERE INVOICENO ="+"'" +invNumber+"'");
+				 	System.out.println("CHARGE = " + finalAmtCharge);
+					rs = stmt.executeQuery(" SELECT count(*)FROM TRANSACTIONS WHERE INVOICENO ="+"'" +invNumber+"' AND CHARGETYPE ="+"'" +chargeNO+ "' AND CHARGE ="+"'" +finalAmtCharge+ "' AND PROCESSINGFEE ="+"'" +finalAmtprocessingFee+ "' AND BILLINGFEE ="+"'" +finalAmtBillingFees+"'" );
 				  int count1 = 0;
 					while (rs.next()) {
 							 count1 = rs.getInt(1);				
@@ -1471,7 +1478,7 @@ public class SendDataToServer  {
 					}
 					if(count1 > 0) 
 					{
-            dupFlag = true;
+            tempFlag = true;
 					}
 					else if(count1 == 0)
 					{
@@ -1573,6 +1580,13 @@ public class SendDataToServer  {
 						 log.error("SQLException", e);
 						flag = false;
 				 }
+
+				 if(tempFlag == true)
+				 { 
+				 	dupFlag = true;
+				 }
+				 System.out.println("tempFlag is " + tempFlag);
+				 System.out.println("dupFlag is " + dupFlag);
         } //end if(flag)
 
 			  }//end of for
