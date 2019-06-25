@@ -25,7 +25,6 @@
 	
 		<script type="text/javascript" src="js/processQueues.js"></script>
 		<script type="text/javascript" src="js/shared/jquery-ui-1.7.2.custom.min.js"></script>
-		<script type="text/javascript" src="https://lib-jira.ucsd.edu:8443/s/570923a7ebac454f838812ae4e331542-T/en_USfs3qxk/64016/6/1.4.25/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=f1fabd54"></script>
 	</head>
 	<body>
 		<div class="container">
