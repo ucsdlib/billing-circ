@@ -886,8 +886,10 @@ private static String getFourthCharacter(char c)
 	  		  break;
 	case 'o': code = "L";
 	  		  break;
+	case 'O': code = "L";
+			    break;
 	case 'z': code = "T";
-			  break;
+			    break;
 	}
 	return code;
 }
