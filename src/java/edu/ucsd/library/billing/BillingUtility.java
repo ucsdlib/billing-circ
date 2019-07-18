@@ -112,6 +112,12 @@ public static boolean processBillingData(HttpServletRequest request,HttpServletR
            }else
            {
            	 char c = loc.charAt(0);
+           	 char c2 = loc.charAt(1);
+
+           	 if (c == 'c' && c2 == 'c'){
+		          c = 'z';
+	           }
+
            	 fourthChar = getFourthCharacter(c);
            }
            
@@ -880,7 +886,7 @@ private static String getFourthCharacter(char c)
 	  		  break;
 	case 'o': code = "L";
 	  		  break;
-	case 'O': code = "L";
+	case 'z': code = "T";
 			  break;
 	}
 	return code;
