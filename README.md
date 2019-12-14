@@ -86,6 +86,6 @@ $ ant local-deploy
 
 ## Docs
 
-[Download Patron Billing Software Rules](https://github.com/ucsdlib/billing-circ/blob/master/docs/Billing_Software_Rules.docx)
+[Patron Billing Document Folder](https://github.com/ucsdlib/billing-circ/tree/master/docs)
 
 [Basic Workflow](https://github.com/ucsdlib/billing-circ/blob/master/docs/basicFlow.jpg)
