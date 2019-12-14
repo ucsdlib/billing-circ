@@ -83,3 +83,9 @@ $ ant clean webapp
 ```
 $ ant local-deploy
 ```
+
+## Docs
+
+[Download Patron Billing Software Rules](https://github.com/ucsdlib/billing-circ/blob/master/docs/Billing_Software_Rules.docx)
+
+[Basic Workflow](https://github.com/ucsdlib/billing-circ/blob/master/docs/basicFlow.jpg)
