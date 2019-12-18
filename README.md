@@ -86,6 +86,5 @@ $ ant local-deploy
 
 ## Docs
 
-[Patron Billing Document Folder](https://github.com/ucsdlib/billing-circ/tree/master/docs)
+[Patron Billing Documentation](https://github.com/ucsdlib/docs/tree/master/billing-circ)
 
-[Basic Workflow](https://github.com/ucsdlib/billing-circ/blob/master/docs/basicFlow.jpg)
