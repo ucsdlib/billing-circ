@@ -143,7 +143,7 @@ public class SendDataToServer  {
 			     String [] ACTstrArr={ACTemail};
 			     String contactemail1="hweng@ucsd.edu";
 			     String contactemail2="gferguson@ucsd.edu";
-			     String contactemail3="lchodur@ucsd.edu";
+			     String contactemail3="LibBilling@ucsd.edu";
 			     String [] contactstrArr1={contactemail1};
 			     String [] contactstrArr2={contactemail2};
 			     String [] contactstrArr3={contactemail3};
@@ -1109,14 +1109,14 @@ public class SendDataToServer  {
 	  out.append("\r\n");
 	  out.append("Department: Library");
 	  out.append("\r\n");
-	  out.append("Contact: Department of Business and Finance");
+	  out.append("Contact: Library Billing");
 	  out.append("\n");
 	  out.append("\r\n");
-	  out.append("Email Address: Department_of_Business_and_Finance_Q&A@AD.UCSD.EDU");
+	  out.append("Email Address: LibBilling@ucsd.edu");
 	  out.append("\r\n");
-	  out.append("Phone: 858 534 5621");
+	  out.append("Phone: 858 822 1859");
 	  out.append("\r\n");
-	  out.append("Mailcode: 0175M");
+	  out.append("Mailcode: 0699");
 	  out.append("\r\n");
 	  out.append("\r\n");
 	  out.append("\r\n");
