@@ -2,13 +2,13 @@
 
 The patron billing software includes the functions of processing and exporting of library circulation billing information to the campus financial systems.
 
-## Prerequisites 
+## Prerequisites
 
 1.JDK 1.7
 
 Make sure you are using JDK 1.7 -- running ```java -version``` should output something like:
 
-``` 
+```
 java version "1.7.0_10"
 Java(TM) SE Runtime Environment (build 1.7.0_10-b18)
 Java HotSpot(TM) 64-Bit Server VM (build 23.6-b04, mixed mode)
@@ -85,6 +85,4 @@ $ ant local-deploy
 ```
 
 ## Docs
-
-[Patron Billing Documentation](https://github.com/ucsdlib/docs/tree/master/billing-circ)
-
+Various reference documents for this application can be found in the `doc` folder in this repository.
